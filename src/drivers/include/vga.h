@@ -12,6 +12,7 @@
 #define REG_SCREEN_DATA 0x3d5
 
 void clear();
-void print();
+void print(char *message);
+void print_at(char *message, int col, int row);
 
 #endif

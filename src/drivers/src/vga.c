@@ -33,6 +33,43 @@ static int get_cursor_offset()
 	return offset * 2;
 }
 
+static int print_char(char c, int col, int row, char attr)
+{
+	unsigned char *screen = (unsigned char *)VIDEO_ADDRESS;
+
+	if (!attr)
+		attr = 0x0f;
+
+	if (col >= MAX_COLS || row >= MAX_ROWS)
+	{
+		screen[2 * (MAX_COLS)*MAX_ROWS - 2] = 'E';
+		screen[2 * (MAX_COLS)*MAX_ROWS - 1] = 0xf4;
+		return get_offset(col, row);
+	}
+
+	int offset;
+
+	if (col >= 0 && row >= 0)
+		offset = get_offset(col, row);
+	else
+		offset = get_cursor_offset();
+
+	if (c == '\n')
+	{
+		row = get_offset_row(offset);
+		offset = get_offset(0, row + 1);
+	}
+	else
+	{
+		screen[offset] = c;
+		screen[offset + 1] = attr;
+		offset += 2;
+	}
+
+	set_cursor_offset(offset);
+	return offset;
+}
+
 void clear()
 {
 	int i;
@@ -48,6 +85,31 @@ void clear()
 	set_cursor_offset(get_offset(0, 0));
 }
 
-void print()
+void print_at(char *message, int col, int row)
 {
+	int offset;
+
+	if (col >= 0 && row >= 0)
+	{
+		offset = get_offset(col, row);
+	}
+	else
+	{
+		offset = get_cursor_offset();
+		row = get_offset_row(offset);
+		col = get_offset_col(offset);
+	}
+
+	int i = 0;
+	while (message[i] != 0)
+	{
+		offset = print_char(message[i++], col++, row, 0x0f);
+		row = get_offset_row(offset);
+		col = get_offset_col(offset);
+	}
+}
+
+void print(char *message)
+{
+	print_at(message, -1, -1);
 }
