@@ -6,17 +6,22 @@ SECTIONS
 {
 	. = 0x100000; /* 1 Mb */
 
-	.text : ALIGN(4096)
+	.text : /*ALIGN(4096)*/
 	{
 		*(.text)
 	}
 
-	.data : ALIGN(4096)
+	.asm :
+	{
+		*(.asm)
+	}
+
+	.data : /*ALIGN(4096)*/
 	{
 		*(.data)
 	}
 
-	.bss  : ALIGN(4096)
+	.bss : /*ALIGN(4096)*/
 	{
 		*(.bss)
 	}
