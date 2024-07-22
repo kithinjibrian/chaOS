@@ -2,8 +2,8 @@
 
 void main(void)
 {
-	clear();
-	print("Brian Kithinji");
+	init_gdt();
+	init_idt();
 	while (1)
 		;
 }

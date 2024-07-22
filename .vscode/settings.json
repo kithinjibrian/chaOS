@@ -3,6 +3,14 @@
 		"*.orca": "plaintext",
 		"vga.h": "c",
 		"kernel.h": "c",
-		"port.h": "c"
+		"port.h": "c",
+		"compare": "cpp",
+		"cstdint": "cpp",
+		"gdt.h": "c",
+		"idt.h": "c",
+		"string.h": "c",
+		"strings.h": "c",
+		"type.h": "c",
+		"mstring.h": "c"
 	}
 }
