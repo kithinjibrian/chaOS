@@ -1,0 +1,7 @@
+{
+	"files.associations": {
+		"*.orca": "plaintext",
+		"vga.h": "c",
+		"kernel.h": "c"
+	}
+}
