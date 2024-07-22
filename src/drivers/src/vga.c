@@ -8,16 +8,13 @@ static void move_cursor()
 {
 	u16_t pos = cursor_y * MAX_COLS + cursor_x;
 	port_byte_out(REG_SCREEN_CTRL, 14);
-	port_byte_out(REG_SCREEN_DATA, pos >> 8);
+	port_byte_out(REG_SCREEN_DATA, (pos >> 8) & 0xFF); // Ensure 8-bit values
 	port_byte_out(REG_SCREEN_CTRL, 15);
-	port_byte_out(REG_SCREEN_DATA, pos);
+	port_byte_out(REG_SCREEN_DATA, pos & 0xFF);
 }
 
 static void scroll()
 {
-	u8_t attr = (0 << 4) | (15 & 0x0F);
-	u8_t blank = 0x20 | (attr << 8);
-
 	if (cursor_y >= MAX_ROWS)
 	{
 		int i;
@@ -25,7 +22,7 @@ static void scroll()
 			video_memory[i] = video_memory[i + MAX_COLS];
 
 		for (i = MAX_COLS * (MAX_ROWS - 1); i < MAX_COLS * MAX_ROWS; i++)
-			video_memory[i] = blank;
+			video_memory[i] = ' ' | (WHITE_ON_BLACK << 8);
 
 		cursor_y = MAX_ROWS - 1;
 	}
@@ -33,11 +30,9 @@ static void scroll()
 
 void clear()
 {
-	u8_t attr = (0 << 4) | (15 & 0x0F);
-	u8_t blank = 0x20 | (attr << 8);
 	int i;
 	for (i = 0; i < MAX_COLS * MAX_ROWS; i++)
-		video_memory[i] = blank;
+		video_memory[i] = ' ' | (WHITE_ON_BLACK << 8);
 
 	cursor_x = 0;
 	cursor_y = 0;
@@ -46,24 +41,32 @@ void clear()
 
 void print_at(char c)
 {
-	u16_t attr = ((0 << 4) | (15 & 0x0F)) << 8;
-	u16_t *location;
-
+	/* Handle backspace, by decrementing cursor position */
 	if (c == 0x08 && cursor_x)
 		cursor_x--;
+
+	/*
+	Handle tab, by incrementing cursor position
+	but only to a point where it is a multiple of 8
+	*/
 	else if (c == 0x09)
 		cursor_x = (cursor_x + 8) & ~(8 - 1);
+
+	/* Handle carriage return */
 	else if (c == '\r')
 		cursor_x = 0;
+
+	/* Handle line feed */
 	else if (c == '\n')
 	{
 		cursor_x = 0;
 		cursor_y++;
 	}
-	else if (c >= ' ')
+
+	/* Printable characters only */
+	else if (c >= ' ' && c <= '~')
 	{
-		location = video_memory + (cursor_y * MAX_COLS + cursor_x);
-		*location = c | attr;
+		video_memory[cursor_y * MAX_COLS + cursor_x] = c | (WHITE_ON_BLACK << 8);
 		cursor_x++;
 	}
 
@@ -74,13 +77,13 @@ void print_at(char c)
 	}
 
 	scroll();
-
 	move_cursor();
 }
 
-void print(char *message)
+void print(const char *message)
 {
-	int i = 0;
-	while (message[i] != '\0')
-		print_at(message[i++]);
+	while (*message)
+	{
+		print_at(*message++);
+	}
 }
