@@ -11,6 +11,8 @@
 		"string.h": "c",
 		"strings.h": "c",
 		"type.h": "c",
-		"mstring.h": "c"
+		"mstring.h": "c",
+		"timer.h": "c",
+		"ratio": "c"
 	}
 }

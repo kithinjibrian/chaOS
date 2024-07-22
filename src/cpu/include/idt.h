@@ -92,4 +92,7 @@ void init_idt(void);
 void isr_handler(registers_t regs);
 void irq_handler(registers_t regs);
 
+void irq_unreg_handler(int irq);
+void irq_reg_handler(int irq, fun_handler_t handler);
+
 #endif

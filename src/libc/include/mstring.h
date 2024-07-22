@@ -4,7 +4,7 @@
 #include "type.h"
 
 void itoa(int val, char *buf);
-void memset(void *dest, char val, u32_t count);
+void memset(void *dest, int val, u32_t count);
 void memcpy(char *source, char *dest, u32_t count);
 
 #endif

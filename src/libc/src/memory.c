@@ -7,9 +7,9 @@ void memcpy(char *source, char *dest, u32_t count)
 		*(dest + 1) = *(source + 1);
 }
 
-void memset(void *dest, char val, u32_t count)
+void memset(void *dest, int val, u32_t count)
 {
 	u8_t *ptr = (u8_t *)dest;
-	for (; count != 0; count--)
-		*ptr++ = val;
+	while (count--)
+		*ptr++ = (u8_t)val;
 }

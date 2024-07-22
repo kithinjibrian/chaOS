@@ -4,6 +4,5 @@ void main(void)
 {
 	init_gdt();
 	init_idt();
-	while (1)
-		;
+	init_timer(100);
 }
