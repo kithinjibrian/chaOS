@@ -2,6 +2,7 @@
 	"files.associations": {
 		"*.orca": "plaintext",
 		"vga.h": "c",
-		"kernel.h": "c"
+		"kernel.h": "c",
+		"port.h": "c"
 	}
 }
