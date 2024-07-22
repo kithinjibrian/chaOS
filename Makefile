@@ -37,3 +37,4 @@ clean:
 	$(MAKE) -C $(SRC_DRIVERS_DIR) clean
 	rm -f $(IMAGE)
 	rm -f $(EXECUTABLE)
+	clear
