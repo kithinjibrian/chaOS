@@ -1,10 +1,9 @@
 #include "kernel.h"
 
-void panic(const char* msg)
+void panic(const char *msg)
 {
-	print(msg);
+	print((char *)msg);
 }
-
 
 void main(void)
 {
