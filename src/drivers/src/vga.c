@@ -83,7 +83,5 @@ void print_at(char c)
 void print(const char *message)
 {
 	while (*message)
-	{
 		print_at(*message++);
-	}
 }
