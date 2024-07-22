@@ -2,9 +2,12 @@
 #define VGA_H
 
 #include "port.h"
+#include "../../libc/include/mstring.h"
 
 #define MAX_COLS 80
 #define MAX_ROWS 25
+#define RED_ON_WHITE 0xf4
+#define WHITE_ON_BLACK 0x0f
 #define VIDEO_ADDRESS 0xB8000
 
 /* Screen i/o ports */
@@ -12,7 +15,7 @@
 #define REG_SCREEN_DATA 0x3d5
 
 void clear();
+void print_at(char c);
 void print(char *message);
-void print_at(char *message, int col, int row);
 
 #endif

@@ -1,115 +1,86 @@
 #include "vga.h"
 
-static int get_offset(int col, int row)
-{
-	return 2 * (row * MAX_COLS + col);
-}
+static u16_t *video_memory = (u16_t *)VIDEO_ADDRESS;
+static int cursor_x = 0;
+static int cursor_y = 0;
 
-static int get_offset_row(int offset)
+static void move_cursor()
 {
-	return offset / (2 * MAX_COLS);
-}
-
-static int get_offset_col(int offset)
-{
-	return (offset - (get_offset_row(offset) * 2 * MAX_COLS)) / 2;
-}
-
-static void set_cursor_offset(int offset)
-{
-	offset /= 2;
+	u16_t pos = cursor_y * MAX_COLS + cursor_x;
 	port_byte_out(REG_SCREEN_CTRL, 14);
-	port_byte_out(REG_SCREEN_DATA, (unsigned char)(offset >> 8));
+	port_byte_out(REG_SCREEN_DATA, pos >> 8);
 	port_byte_out(REG_SCREEN_CTRL, 15);
-	port_byte_out(REG_SCREEN_DATA, (unsigned char)(offset & 0xff));
+	port_byte_out(REG_SCREEN_DATA, pos);
 }
 
-static int get_cursor_offset()
+static void scroll()
 {
-	port_byte_out(REG_SCREEN_CTRL, 14);
-	int offset = port_byte_in(REG_SCREEN_DATA) << 8;
-	port_byte_out(REG_SCREEN_CTRL, 15);
-	offset += port_byte_in(REG_SCREEN_DATA);
-	return offset * 2;
-}
+	u8_t attr = (0 << 4) | (15 & 0x0F);
+	u8_t blank = 0x20 | (attr << 8);
 
-static int print_char(char c, int col, int row, char attr)
-{
-	unsigned char *screen = (unsigned char *)VIDEO_ADDRESS;
-
-	if (!attr)
-		attr = 0x0f;
-
-	if (col >= MAX_COLS || row >= MAX_ROWS)
+	if (cursor_y >= MAX_ROWS)
 	{
-		screen[2 * (MAX_COLS)*MAX_ROWS - 2] = 'E';
-		screen[2 * (MAX_COLS)*MAX_ROWS - 1] = 0xf4;
-		return get_offset(col, row);
+		int i;
+		for (i = 0; i < MAX_COLS * (MAX_ROWS - 1); i++)
+			video_memory[i] = video_memory[i + MAX_COLS];
+
+		for (i = MAX_COLS * (MAX_ROWS - 1); i < MAX_COLS * MAX_ROWS; i++)
+			video_memory[i] = blank;
+
+		cursor_y = MAX_ROWS - 1;
 	}
-
-	int offset;
-
-	if (col >= 0 && row >= 0)
-		offset = get_offset(col, row);
-	else
-		offset = get_cursor_offset();
-
-	if (c == '\n')
-	{
-		row = get_offset_row(offset);
-		offset = get_offset(0, row + 1);
-	}
-	else
-	{
-		screen[offset] = c;
-		screen[offset + 1] = attr;
-		offset += 2;
-	}
-
-	set_cursor_offset(offset);
-	return offset;
 }
 
 void clear()
 {
+	u8_t attr = (0 << 4) | (15 & 0x0F);
+	u8_t blank = 0x20 | (attr << 8);
 	int i;
-	int screen_size = MAX_COLS * MAX_ROWS;
-	char *screen = (char *)VIDEO_ADDRESS;
+	for (i = 0; i < MAX_COLS * MAX_ROWS; i++)
+		video_memory[i] = blank;
 
-	for (i = 0; i < screen_size; i++)
-	{
-		screen[i * 2] = ' ';
-		screen[i * 2 + 1] = 0x0f;
-	}
-
-	set_cursor_offset(get_offset(0, 0));
+	cursor_x = 0;
+	cursor_y = 0;
+	move_cursor();
 }
 
-void print_at(char *message, int col, int row)
+void print_at(char c)
 {
-	int offset;
+	u16_t attr = ((0 << 4) | (15 & 0x0F)) << 8;
+	u16_t *location;
 
-	if (col >= 0 && row >= 0)
+	if (c == 0x08 && cursor_x)
+		cursor_x--;
+	else if (c == 0x09)
+		cursor_x = (cursor_x + 8) & ~(8 - 1);
+	else if (c == '\r')
+		cursor_x = 0;
+	else if (c == '\n')
 	{
-		offset = get_offset(col, row);
+		cursor_x = 0;
+		cursor_y++;
 	}
-	else
+	else if (c >= ' ')
 	{
-		offset = get_cursor_offset();
-		row = get_offset_row(offset);
-		col = get_offset_col(offset);
+		location = video_memory + (cursor_y * MAX_COLS + cursor_x);
+		*location = c | attr;
+		cursor_x++;
 	}
 
-	int i = 0;
-	while (message[i] != 0)
+	if (cursor_x >= MAX_COLS)
 	{
-		offset = print_char(message[i++], col++, row, 0x0f);
-		row = get_offset_row(offset);
-		col = get_offset_col(offset);
+		cursor_x = 0;
+		cursor_y++;
 	}
+
+	scroll();
+
+	move_cursor();
 }
 
 void print(char *message)
 {
-	print_at(message, -1, -1);
+	int i = 0;
+	while (message[i] != '\0')
+		print_at(message[i++]);
 }
