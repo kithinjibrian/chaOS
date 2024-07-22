@@ -18,4 +18,7 @@ void clear();
 void print_at(char c);
 void print(char *message);
 
+
+
+
 #endif

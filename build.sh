@@ -34,7 +34,7 @@ if [ "$1" == "clean" ]; then
 	clean
 
 elif [ "$1" == "run" ]; then
-	build && qemu-system-i386 "$IMAGE"
+	build && qemu-system-i386 -hda "$IMAGE"
 
 else
 	build
