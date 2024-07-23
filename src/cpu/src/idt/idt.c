@@ -135,30 +135,33 @@ void isr_handler(registers_t regs)
 	}
 }
 
-fun_handler_t irqs[256];
+fun_handler_t ih[16] = {
+	0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0};
 
 void irq_reg_handler(int irq, fun_handler_t handler)
 {
-	irqs[irq] = handler;
+	ih[irq] = handler;
 }
 
 void irq_unreg_handler(int irq)
 {
-	irqs[irq] = 0;
+	ih[irq] = 0;
 }
 
 void irq_handler(registers_t regs)
 {
+	fun_handler_t handler = ih[regs.int_no - 32];
+
+	if (handler)
+	{
+		handler(regs);
+	}
+
 	if (regs.int_no >= 40)
 	{
 		port_byte_out(0xA0, 0x20);
 	}
 
 	port_byte_out(0x20, 0x20);
-
-	fun_handler_t handler = irqs[regs.int_no];
-	if (handler)
-	{
-		handler(regs);
-	}
 }
