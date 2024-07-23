@@ -39,7 +39,7 @@ void clear()
 	move_cursor();
 }
 
-void print_at(char c)
+void print_char(char c)
 {
 	/* Handle backspace, by decrementing cursor position */
 	if (c == 0x08 && cursor_x)
@@ -80,8 +80,57 @@ void print_at(char c)
 	move_cursor();
 }
 
-void print(const char *message)
+void print(const char *fmt, ...)
 {
-	while (*message)
-		print_at(*message++);
+	// Get the pointer to the first argument
+	int *p = (int *)(&fmt + 1);
+
+	while (*fmt)
+	{
+		if (*fmt == '%')
+		{
+			fmt++;
+			switch (*fmt)
+			{
+			case 'c':
+				char c = (char)*p;
+				print_char(c);
+				break;
+
+			case 's':
+				char *s = (char *)*p;
+				while (*s)
+				{
+					print_char(*s);
+					s++;
+				}
+				break;
+
+			case 'd':
+			{
+				int num = *p;
+
+				// a 32 bit integer is at most 11 digits plus the sign
+				char ac[11];
+
+				itoa(num, ac, 10);
+
+				for (int i = 0; i < 11; i++)
+					print_char(ac[i]);
+
+				break;
+			}
+
+			default:
+				break;
+			}
+
+			p++;
+		}
+		else
+		{
+			print_char(*fmt);
+		}
+		fmt++;
+	}
 }

@@ -15,7 +15,7 @@
 #define REG_SCREEN_DATA 0x3d5
 
 void clear();
-void print_at(char c);
-void print(const char *message);
+void print_char(char c);
+void print(const char *fmt, ...);
 
 #endif
