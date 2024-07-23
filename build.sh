@@ -34,8 +34,17 @@ if [ "$1" == "clean" ]; then
 	clean
 
 elif [ "$1" == "run" ]; then
-	build && qemu-system-i386 -hda "$IMAGE"
+	build
+	qemu-system-i386 -hda "$IMAGE"
 
+elif [ "$1" == "debug" ]; then
+    build
+    qemu-system-i386 -hda "$IMAGE" -s &
+
+	 # Allow qemu to start
+    sleep 1
+	
+    gdb -ex "file $HOME/$DEST/boot/kernel" -ex "target remote localhost:1234"
 else
 	build
 fi
