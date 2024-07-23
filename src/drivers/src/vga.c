@@ -122,6 +122,8 @@ void print(const char *fmt, ...)
 			}
 
 			default:
+				print_char('%');
+				print_char(*fmt);
 				break;
 			}
 
