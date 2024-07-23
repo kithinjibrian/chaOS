@@ -19,6 +19,11 @@ void init_idt(void)
 
 	memset(&idt, 0, sizeof(idt_entry_t) * 256);
 
+	/**
+	 * Remap master and slave PICs
+	 * Master: 0x20, data: 0x21
+	 * Slave: 0xA0, data: 0xA1
+	 */
 	port_byte_out(0x20, 0x11);
 	port_byte_out(0xA0, 0x11);
 
@@ -151,6 +156,10 @@ void irq_unreg_handler(int irq)
 
 void irq_handler(registers_t regs)
 {
+	/**
+	 *	resize interrupt number so that it is in the range 0-15
+	 *	i.e The timer interrupt is 32 but becomes 0
+	 */
 	fun_handler_t handler = ih[regs.int_no - 32];
 
 	if (handler)
@@ -158,10 +167,19 @@ void irq_handler(registers_t regs)
 		handler(regs);
 	}
 
+	/**
+	 * send EOI (end of interrupt) to interrupt controller
+	 */
 	if (regs.int_no >= 40)
 	{
+		/**
+		 * send reset signal to slave
+		 */
 		port_byte_out(0xA0, 0x20);
 	}
 
+	/**
+	 * send reset signal to master
+	 */
 	port_byte_out(0x20, 0x20);
 }
