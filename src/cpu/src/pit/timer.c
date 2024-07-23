@@ -1,8 +1,8 @@
 #include "timer.h"
 
-u32_t tick;
+u32_t tick = 0;
 
-void timer_callback(registers_t regs)
+static void timer_callback(registers_t regs)
 {
 	tick++;
 	print("Tick: ");
