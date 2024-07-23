@@ -82,6 +82,10 @@ void print_char(char c)
 
 /**
  * Print a formatted string to the VGA
+ * Expected format specifier is %c, %s, %d
+ * %c - print a character
+ * %s - print a string
+ * %d - print an integer
  * @param fmt format string
  * @param ... arguments
  */
