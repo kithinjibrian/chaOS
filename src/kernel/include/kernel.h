@@ -5,21 +5,23 @@
 #include "../../cpu/include/idt.h"
 #include "../../cpu/include/timer.h"
 #include "../../drivers/include/vga.h"
+#include "../../drivers/include/keyboard.h"
 
 /**
  * main kernel process
  */
 void main(void);
+
 /**
  * alert for kernel failure
  */
-void panic(const char*);
+void panic(const char *);
 
 /**
  * error handling mechanism
  * cast error to void poiter and return
  */
-#define ERROR(value) (void*)(value)
+#define ERROR(value) (void *)(value)
 /**
  * integer error reporting mechanism
  */
@@ -27,6 +29,6 @@ void panic(const char*);
 /**
  * boolean error reporting
  */
-#define ISERR(value)((int)value < 0)
+#define ISERR(value) ((int)value < 0)
 
 #endif

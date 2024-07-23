@@ -3,7 +3,7 @@
 
 #include "type.h"
 
-void itoa(int val, char *buf);
+void itoa(int num, char *str, int base);
 void memset(void *dest, int val, u32_t count);
 void memcpy(char *source, char *dest, u32_t count);
 

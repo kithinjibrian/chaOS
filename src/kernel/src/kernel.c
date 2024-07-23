@@ -9,5 +9,7 @@ void main(void)
 {
 	init_gdt();
 	init_idt();
-	init_timer(100);
+	irq_reg_handler(1, &keyboard_handler);
+	while (1)
+		;
 }

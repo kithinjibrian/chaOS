@@ -13,6 +13,10 @@
 		"type.h": "c",
 		"mstring.h": "c",
 		"timer.h": "c",
-		"ratio": "c"
+		"ratio": "c",
+		"keyboard.h": "c",
+		"stdio.h": "c",
+		"io.h": "c",
+		"system_error": "c"
 	}
 }

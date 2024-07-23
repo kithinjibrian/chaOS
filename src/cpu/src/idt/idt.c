@@ -12,6 +12,9 @@ static void set_idt_gate(int num, u32_t base, u16_t sel, u8_t flags)
 	idt[num].flags = flags | 0x60;
 }
 
+/**
+ * Initialize the IDT
+ */
 void init_idt(void)
 {
 	idt_ptr.limit = (sizeof(idt_entry_t) * 256) - 1;
@@ -130,6 +133,10 @@ unsigned char *exception_messages[] = {
 	"Reserved",
 };
 
+/**
+ * handle interrupt request
+ * @param regs registers
+ */
 void isr_handler(registers_t regs)
 {
 	if (regs.int_no < 32)
@@ -144,6 +151,11 @@ fun_handler_t ih[16] = {
 	0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0};
 
+/**
+ * register interrupt handler
+ * @param irq interrupt number
+ * @param handler interrupt handler
+ */
 void irq_reg_handler(int irq, fun_handler_t handler)
 {
 	ih[irq] = handler;
@@ -154,6 +166,10 @@ void irq_unreg_handler(int irq)
 	ih[irq] = 0;
 }
 
+/**
+ * handle interrupt request
+ * @param regs registers
+ */
 void irq_handler(registers_t regs)
 {
 	/**

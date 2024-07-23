@@ -80,9 +80,16 @@ void print_char(char c)
 	move_cursor();
 }
 
+/**
+ * Print a formatted string to the VGA
+ * @param fmt format string
+ * @param ... arguments
+ */
 void print(const char *fmt, ...)
 {
-	// Get the pointer to the first argument
+	/**
+	 * Get the pointer to the first argument
+	 */
 	int *p = (int *)(&fmt + 1);
 
 	while (*fmt)
@@ -110,7 +117,9 @@ void print(const char *fmt, ...)
 			{
 				int num = *p;
 
-				// a 32 bit integer is at most 11 digits plus the sign
+				/**
+				 *  a 32 bit integer is at most 11 digits plus the sign
+				 */
 				char ac[11];
 
 				itoa(num, ac, 10);

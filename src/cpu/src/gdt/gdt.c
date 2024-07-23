@@ -21,6 +21,9 @@ static void gdt_set_gate(
 	gdt_entries[num].access = access;
 }
 
+/**
+ * Initialize the Global Descriptor Table
+ */
 void init_gdt(void)
 {
 	gdt_ptr.limit = (sizeof(gdt_entry_t) * 5) - 1;
