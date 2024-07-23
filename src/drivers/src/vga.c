@@ -42,14 +42,28 @@ void clear()
 void print_char(char c)
 {
 	/* Handle backspace, by decrementing cursor position */
-	if (c == 0x08 && cursor_x)
-		cursor_x--;
+	if (c == '\b')
+	{
+		/* If cursor is at the start of the line and not on the first line */
+		if (cursor_x == 0 && cursor_y != 0)
+		{
+			cursor_y--;				 // Move up to the previous line
+			cursor_x = MAX_COLS - 1; // Move to the end of the new line
+		}
+		else if (cursor_x > 0)
+		{
+			cursor_x--; // Move cursor left if not at the start of the line
+		}
+
+		/* Clear the character at the current cursor position */
+		video_memory[cursor_y * MAX_COLS + cursor_x] = ' ' | (WHITE_ON_BLACK << 8);
+	}
 
 	/*
 	Handle tab, by incrementing cursor position
 	but only to a point where it is a multiple of 8
 	*/
-	else if (c == 0x09)
+	else if (c == '\t')
 		cursor_x = (cursor_x + 8) & ~(8 - 1);
 
 	/* Handle carriage return */
