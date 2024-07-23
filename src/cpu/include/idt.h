@@ -26,14 +26,6 @@ typedef struct idt_ptr_t
 
 #pragma pack(pop)
 
-typedef struct registers_t
-{
-	u32_t ds;
-	u32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;
-	u32_t int_no, err_code;
-	u32_t eip, cs, eflags, user_esp, user_ss;
-} registers_t;
-
 typedef void (*fun_handler_t)(registers_t);
 
 extern void idt_flush(u32_t);
