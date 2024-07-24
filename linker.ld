@@ -1,28 +1,46 @@
 /* specifies format of final executable binary */
 
-OUTPUT_FORMAT(elf32-i386)
 ENTRY(start)
+OUTPUT_FORMAT(elf32-i386)
+
 SECTIONS
 {
-	. = 0x100000; /* 1 Mb */
+	. = 0x00100000;
 
-	.text : /*ALIGN(4096)*/
-	{
+	.multiboot ALIGN(4K): {
+		*(.multiboot)
+	}
+
+	.note.gnu.build-id ALIGN(4K): {
+		*(.note.gnu.build-id)
+	}
+
+	.boot ALIGN(4K): {
+		*(.boot)
+	}
+
+	. += 0xC0000000;
+
+	kernel_vstart = .;
+	kernel_pstart = . - 0xC0000000;
+
+	.text ALIGN(4K): AT(ADDR(.text) - 0xC0000000) {
 		*(.text)
 	}
 
-	.asm :
-	{
-		*(.asm)
+	.rodata ALIGN(4K): AT(ADDR(.rodata) - 0xC0000000) {
+		*(.rodata)
 	}
 
-	.data : /*ALIGN(4096)*/
-	{
+	.data ALIGN(4K): AT(ADDR(.data) - 0xC0000000) {
 		*(.data)
 	}
 
-	.bss : /*ALIGN(4096)*/
-	{
+	.bss ALIGN(4K): AT(ADDR(.bss) - 0xC0000000) {
+		*(COMMON)
 		*(.bss)
 	}
+
+	kernel_vend = .;
+	kernel_pend = . - 0xC0000000;
 }
