@@ -37,6 +37,10 @@ elif [ "$1" == "run" ]; then
 	build
 	qemu-system-i386 -hda "$IMAGE"
 
+elif [ "$1" == "bochs" ]; then
+	build
+	bochs -f bochsrc
+
 elif [ "$1" == "debug" ]; then
     build
     qemu-system-i386 -hda "$IMAGE" -s &
