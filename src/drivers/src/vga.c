@@ -148,6 +148,16 @@ void print(const char *fmt, ...)
 				break;
 			}
 
+			case 'x':
+			{
+				u32_t hex = (u32_t)*p;
+				char ac[11];
+				htoa(hex, ac);
+				for (int i = 0; i < 11; i++)
+					print_char(ac[i]);
+				break;
+			}
+
 			default:
 				print_char('%');
 				print_char(*fmt);
