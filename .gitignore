@@ -7,6 +7,7 @@
 *.obj
 *.elf
 *.iso
+*.ini
 
 # Linker output
 *.ilk
