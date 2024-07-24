@@ -1,26 +1,26 @@
 #include "idt.h"
 
-idt_entry_t idt[256];
-idt_ptr_t idt_ptr;
+idt_entry_t idt_g[256];
+idt_ptr_t idt_ptr_g;
 
 static void set_idt_gate(int num, u32_t base, u16_t sel, u8_t flags)
 {
-	idt[num].base_lo = base & 0xFFFF;
-	idt[num].base_hi = (base >> 16) & 0xFFFF;
-	idt[num].sel = sel;
-	idt[num].always0 = 0;
-	idt[num].flags = flags | 0x60;
+	idt_g[num].base_lo = base & 0xFFFF;
+	idt_g[num].base_hi = (base >> 16) & 0xFFFF;
+	idt_g[num].sel = sel;
+	idt_g[num].always0 = 0;
+	idt_g[num].flags = flags | 0x60;
 }
 
 /**
- * Initialize the IDT
+ * Initialize the idt_g
  */
 void init_idt(void)
 {
-	idt_ptr.limit = (sizeof(idt_entry_t) * 256) - 1;
-	idt_ptr.base = (u32_t)&idt;
+	idt_ptr_g.limit = (sizeof(idt_entry_t) * 256) - 1;
+	idt_ptr_g.base = (u32_t)&idt_g;
 
-	memset(&idt, 0, sizeof(idt_entry_t) * 256);
+	memset(&idt_g, 0, sizeof(idt_entry_t) * 256);
 
 	/**
 	 * Remap master and slave PICs
@@ -92,7 +92,7 @@ void init_idt(void)
 	set_idt_gate(46, (u32_t)irq14, 0x08, 0x8E);
 	set_idt_gate(47, (u32_t)irq15, 0x08, 0x8E);
 
-	idt_flush((u32_t)&idt_ptr);
+	idt_flush((u32_t)&idt_ptr_g);
 }
 
 unsigned char *exception_messages[] = {

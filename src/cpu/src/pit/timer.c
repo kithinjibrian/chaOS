@@ -1,10 +1,10 @@
 #include "timer.h"
 
-u32_t tick = 0;
+u32_t tick_g = 0;
 
 static void timer_callback(registers_t regs)
 {
-	tick++;
+	tick_g++;
 }
 
 /**
@@ -13,7 +13,7 @@ static void timer_callback(registers_t regs)
  */
 void init_timer(u32_t freq)
 {
-	tick = 0;
+	tick_g = 0;
 
 	irq_reg_handler(0, &timer_callback);
 	u32_t divisor = 1193180 / freq;

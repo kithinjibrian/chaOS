@@ -1,7 +1,7 @@
 #include "keyboard.h"
 
-bool shift_on = false;
-bool caps_on = false;
+bool caps_on_g = false;
+bool shift_on_g = false;
 
 const u32_t UNKNOWN = 0xFFFFFFFF;
 const u32_t F1 = 0xFFFFFFFF - 1;
@@ -132,14 +132,14 @@ void keyboard_handler(registers_t regs)
 
 	case 42:
 		// shift key
-		shift_on = !press;
+		shift_on_g = !press;
 		break;
 
 	case 58:
 		// caps lock
 		if (!press)
 		{
-			caps_on = !caps_on;
+			caps_on_g = !caps_on_g;
 		}
 		break;
 
@@ -147,7 +147,7 @@ void keyboard_handler(registers_t regs)
 		if (!press)
 		{
 			char ch;
-			if (shift_on)
+			if (shift_on_g)
 			{
 				ch = shift_up[scan_code];
 			}
@@ -156,12 +156,12 @@ void keyboard_handler(registers_t regs)
 				ch = shift_down[scan_code];
 			}
 
-			if (caps_on && ch >= 'a' && ch <= 'z')
+			if (caps_on_g && ch >= 'a' && ch <= 'z')
 			{
 				/* convert to upper case */
 				ch -= 32;
 			}
-			else if (caps_on && ch >= 'A' && ch <= 'Z')
+			else if (caps_on_g && ch >= 'A' && ch <= 'Z')
 			{
 				/* convert to lower case */
 				ch += 32;
