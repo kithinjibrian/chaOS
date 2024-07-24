@@ -1,5 +1,19 @@
 #include "mstring.h"
 
+void reverse(char str[], int length)
+{
+	int start = 0;
+	int end = length - 1;
+	while (start < end)
+	{
+		char temp = str[start];
+		str[start] = str[end];
+		str[end] = temp;
+		start++;
+		end--;
+	}
+}
+
 /**
  * Convert integer to ASCII string
  *
@@ -9,63 +23,75 @@
  */
 void itoa(int num, char *str, int base)
 {
-	/**
-	 * Handle special case for base 10 (negative numbers)
-	 */
-	if (base == 10 && num < 0)
-	{
-		/**
-		 * Convert negative number to positive for processing
-		 */
-		int temp = -num;
-		num = temp;
-		// Add minus sign
-		str[0] = '-';
-		str++;
-	}
-
-	/**
-	 * Convert number to string
-	 * Buffer for the number representation
-	 */
-	char buffer[33];
 	int i = 0;
+	int isNegative = 0;
 
-	/**
-	 * Handle 0 explicitly, otherwise empty string is produced
-	 */
+	// Handle 0 explicitly, otherwise empty string is printed for 0
 	if (num == 0)
 	{
 		str[i++] = '0';
+		str[i] = '\0';
+		return;
 	}
-	else
+
+	// In standard itoa(), negative numbers are only handled if base is 10
+	if (num < 0 && base == 10)
 	{
-		while (num != 0)
-		{
-			int digit = num % base;
-			if (digit < 10)
-			{
-				buffer[i++] = digit + '0';
-			}
-			else
-			{
-				buffer[i++] = digit - 10 + 'a'; // For bases > 10
-			}
-			num /= base;
+		isNegative = 1;
+		num = -num;
+	}
+
+	// Process individual digits
+	while (num != 0)
+	{
+		int rem = num % base;
+		str[i++] = (rem > 9) ? (rem - 10) + 'a' : rem + '0';
+		num = num / base;
+	}
+
+	// If number is negative, append '-'
+	if (isNegative)
+	{
+		str[i++] = '-';
+	}
+
+	str[i] = '\0'; // Append string terminator
+
+	// Reverse the string
+	reverse(str, i);
+}
+
+void htoa(u32_t hex, char *str)
+{
+	const char hexDigits[] = "0123456789ABCDEF";
+	int i = 0;
+
+	// Add '0x' prefix
+	str[i++] = '0';
+	str[i++] = 'x';
+
+	// Convert hex value to string from highest nibble to lowest
+	int shift = (sizeof(unsigned int) * 8) - 4; // Start with the highest nibble
+	int leading = 1;							// Flag to skip leading zeros
+
+	while (shift >= 0)
+	{
+		int digit = (hex >> shift) & 0xF; // Extract each nibble
+
+		if (digit != 0 || !leading)
+		{ // Skip leading zeros
+			str[i++] = hexDigits[digit];
+			leading = 0;
 		}
+
+		shift -= 4;
 	}
 
-	/**
-	 * Append null terminator
-	 */
-	buffer[i] = '\0';
-
-	/**
-	 *  Reverse the string
-	 */
-	for (int j = 0; j < i; j++)
+	// If all digits are zeros (hex is zero), add a single zero
+	if (leading)
 	{
-		str[j] = buffer[i - j - 1];
+		str[i++] = '0';
 	}
-	str[i] = '\0';
+
+	str[i] = '\0'; // Null-terminate the string
 }
