@@ -95,3 +95,4 @@ void htoa(u32_t hex, char *str)
 
 	str[i] = '\0'; // Null-terminate the string
 }
+
