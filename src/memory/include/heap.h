@@ -24,7 +24,7 @@ struct heap
 };
 
 int heap_create(struct heap* heap, void* ptr, void* end, struct heap_table* table);
-void* heap_malloc(struct heap* heap, u8_t size);
+void* heap_malloc(struct heap* heap, u32_t size);
 void heap_free(struct heap* heap, void* ptr);
 
 #endif

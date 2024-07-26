@@ -1,7 +1,7 @@
 #ifndef MEMORY_H
 #define MEMORY_H
 
-#include "config/config.h"
+#include "../../config/config.h"
 
 
 void memset(void *dest, int val, u32_t count);
