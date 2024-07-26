@@ -8,8 +8,8 @@
 
 
 HOME="."
-KERNEL="chaos"
-IMAGE="chaos.iso"
+KERNEL="CHAOS"
+IMAGE="CHAOS.iso"
 DEST="iso"
 
 build() {

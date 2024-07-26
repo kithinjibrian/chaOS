@@ -4,7 +4,7 @@
 /**
  * every component is right
  */
-#define SHEAROS_ALL_OK 0
+#define CHAOS_ALL_OK 0
 /**
  * error - input/ouptut stream
  */

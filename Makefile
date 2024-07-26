@@ -1,7 +1,7 @@
 LD = ld
 LDFLAGS = -m elf_i386 -T linker.ld
-EXECUTABLE = chaos
-IMAGE = chaos.iso
+EXECUTABLE = CHAOS
+IMAGE = CHAOS.iso
 
 SRC_CPU_DIR = src/cpu
 SRC_LIBC_DIR = src/libc

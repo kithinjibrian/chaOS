@@ -1,15 +1,35 @@
-#include "memory.h"
+#include "../include/memory.h"
 
-void* memset(void* ptr, int c, size_t size)
+/**
+ * Copy a block of memory
+ * @param source pointer to source
+ * @param dest pointer to destination
+ * @param count number of bytes
+ */
+void memcpy(char *source, char *dest, u32_t count)
 {
-    char* c_ptr = (char*) ptr;
-    for (int i = 0; i < size; i++)
-    {
-        c_ptr[i] = (char) c;
-    }
-    return ptr;
+	int i;
+	for (i = 0; i < count; i++)
+		*(dest + 1) = *(source + 1);
 }
 
+/**
+ * Fill a block of memory with a value
+ * @param dest pointer to memory
+ * @param val value to fill
+ * @param count number of bytes
+ */
+void memset(void *dest, int val, u32_t count)
+{
+	u8_t *ptr = (u8_t *)dest;
+	while (count--)
+		*ptr++ = (u8_t)val;
+}
+
+/**
+ * compare values of two memory blocks
+ * @param count compare upto this number of bytes
+ */
 int memcmp(void* s1, void* s2, int count)
 {
     char* c1 = s1;
@@ -23,15 +43,4 @@ int memcmp(void* s1, void* s2, int count)
     }
 
     return 0;
-}
-
-void* memcpy(void* dest, void* src, int len)
-{
-    char *d = dest;
-    char *s = src;
-    while(len--)
-    {
-        *d++ = *s++;
-    }
-    return dest;
 }
