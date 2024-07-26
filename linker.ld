@@ -1,11 +1,12 @@
 /* specifies format of final executable binary */
 
 ENTRY(start)
-OUTPUT_FORMAT(elf32-i386)
 
 SECTIONS
 {
 	. = 0x00100000;
+
+	kernel_pstart = .;
 
 	.multiboot ALIGN(4K): {
 		*(.multiboot)
@@ -21,8 +22,7 @@ SECTIONS
 
 	. += 0xC0000000;
 
-	kernel_vstart = .;
-	kernel_pstart = . - 0xC0000000;
+	kernel_vstart = 0xC0000000;
 
 	.text ALIGN(4K): AT(ADDR(.text) - 0xC0000000) {
 		*(.text)

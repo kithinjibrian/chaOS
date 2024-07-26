@@ -35,7 +35,7 @@ if [ "$1" == "clean" ]; then
 
 elif [ "$1" == "run" ]; then
 	build
-	qemu-system-i386 -hda "$IMAGE"
+	qemu-system-i386 -m 256M -hda "$IMAGE"
 
 elif [ "$1" == "bochs" ]; then
 	build

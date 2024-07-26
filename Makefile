@@ -1,5 +1,5 @@
-LD = ld
-LDFLAGS = -m elf_i386 -T linker.ld
+LD = i686-elf-ld
+LDFLAGS = -T linker.ld
 EXECUTABLE = chaos
 IMAGE = chaos.iso
 
@@ -39,7 +39,6 @@ kernel:
 	$(MAKE) -C $(SRC_KERNEL_DIR)
 
 $(EXECUTABLE): $(BOOT_OBJS) $(KERNEL_OBJS)
-	@echo "Linking $(EXECUTABLE) with $(BOOT_OBJS) $(KERNEL_OBJS)"
 	$(LD) $(LDFLAGS) -o $(EXECUTABLE) $(BOOT_OBJS) $(LIBC_OBJS) $(KERNEL_OBJS) $(DRIVERS_OBJS) $(CPU_OBJS)
 
 .PHONY: clean
@@ -51,4 +50,3 @@ clean:
 	$(MAKE) -C $(SRC_DRIVERS_DIR) clean
 	rm -f $(IMAGE)
 	rm -f $(EXECUTABLE)
-	clear

@@ -1,5 +1,5 @@
-CC = gcc
-CFLAGS = -g -m32 -fno-stack-protector -fno-builtin
+CC = i686-elf-gcc
+CFLAGS = -g -ffreestanding
 
 SRC_DIR = src
 BUILD_DIR = build

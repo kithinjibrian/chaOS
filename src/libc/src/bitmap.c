@@ -1,0 +1,133 @@
+#include "bitmap.h"
+
+/**
+ * Set bit at index in bitmap of size 8 bits
+ * @param bitmap bitmap
+ * @param index index in bitmap
+ */
+void bit_set_v8(u8_t bitmap[], int index)
+{
+	bitmap[index / 8] |= (1 << (index % 8));
+}
+
+/**
+ * Get bit at index in bitmap of size 8 bits
+ * @param bitmap bitmap
+ * @param index index in bitmap
+ */
+int bit_get_v8(u8_t bitmap[], int index)
+{
+	return (bitmap[index / 8] >> (index % 8)) & 1;
+}
+
+/**
+ * Clear bit at index in bitmap of size 8 bits
+ * @param bitmap bitmap
+ * @param index index in bitmap
+ */
+void bit_clear_v8(u8_t bitmap[], int index)
+{
+	bitmap[index / 8] &= ~(1 << (index % 8));
+}
+
+/**
+ * Search for bit at index in bitmap of size 8 bits
+ * @param bitmap bitmap
+ * @param index index in bitmap
+ */
+int bit_search_v8(u8_t bitmap[], int size, int value)
+{
+	for (int i = 0; i < size * 8; ++i)
+	{
+		if (((bitmap[i / 8] >> (i % 8)) & 1) == value)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+/**
+ * Print bit at index in bitmap of size 8 bits
+ * @param bitmap bitmap
+ * @param size size of bitmap
+ */
+void bit_print_v8(u8_t bitmap[], int size)
+{
+	for (int i = 0; i < size; ++i)
+	{
+		print("(row: %d) = ", i);
+		for (int j = 7; j >= 0; --j)
+		{
+			print("%d", (bitmap[i] >> j) & 1);
+		}
+		print("\n");
+	}
+	print("\n");
+}
+
+/**
+ * Set bit at index in bitmap of size 32 bits
+ * @param bitmap bitmap
+ * @param index index in bitmap
+ */
+void bit_set_v32(u32_t bitmap[], int index)
+{
+	bitmap[index / 32] |= (1 << (index % 32));
+}
+
+/**
+ * Get bit at index in bitmap of size 32 bits
+ * @param bitmap bitmap
+ * @param index index in bitmap
+ */
+int bit_get_v32(u32_t bitmap[], int index)
+{
+	return (bitmap[index / 32] >> (index % 32)) & 1;
+}
+
+/**
+ * Clear bit at index in bitmap of size 32 bits
+ * @param bitmap bitmap
+ * @param index index in bitmap
+ */
+void bit_clear_v32(u32_t bitmap[], int index)
+{
+	bitmap[index / 32] &= ~(1 << (index % 32));
+}
+
+/**
+ * Search for bit at index in bitmap of size 32 bits
+ * @param bitmap bitmap
+ * @param index index in bitmap
+ */
+int bit_search_v32(u32_t bitmap[], int size, int value)
+{
+	for (int i = 0; i < size * 32; ++i)
+	{
+		if (((bitmap[i / 32] >> (i % 32)) & 1) == value)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+/**
+ * Print bit at index in bitmap of size 32 bits
+ * @param bitmap bitmap
+ * @param index index in bitmap
+ */
+void bit_print_v32(u32_t bitmap[], u32_t size)
+{
+	for (u32_t i = 0; i < size; ++i)
+	{
+		print("(row: %d) = ", i);
+		for (int j = 31; j >= 0; --j)
+		{
+			print("%d", (bitmap[i] >> j) & 1);
+		}
+		print("\n");
+	}
+	print("\n");
+}

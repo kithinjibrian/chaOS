@@ -142,7 +142,7 @@ void print(const char *fmt, ...)
 
 				itoa(num, ac, 10);
 
-				for (int i = 0; i < 11; i++)
+				for (int i = 0; ac[i] != '\0'; i++)
 					print_char(ac[i]);
 
 				break;

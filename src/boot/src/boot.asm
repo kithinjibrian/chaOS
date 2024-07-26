@@ -81,6 +81,7 @@ halt:
 
 section .data
 align 4096
+global initial_page_dir
 initial_page_dir:
     ; This page directory entry identity-maps the first 4MB of the 32-bit physical address space.
     ; All bits are clear except the following:
@@ -93,5 +94,6 @@ initial_page_dir:
 	times (KERNEL_PAGE_NUM - 1) dd 0	; Pages before kernel space.
 	; This page directory entry defines a 4MB page containing the kernel.
 	dd 0x00000083
+	dd 0x00000083
 
-	times (1024 - KERNEL_PAGE_NUM - 1) dd 0 ; Pages after the kernel image.
+	times (1024 - KERNEL_PAGE_NUM - 2) dd 0 ; Pages after the kernel image.

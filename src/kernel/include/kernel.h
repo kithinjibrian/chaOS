@@ -1,6 +1,9 @@
 #ifndef KERNEL_H
 #define KERNEL_H
 
+#include "page.h"
+#include "pmm.h"
+
 #include "../../cpu/include/gdt.h"
 #include "../../cpu/include/idt.h"
 #include "../../cpu/include/timer.h"
@@ -10,7 +13,7 @@
 /**
  * main kernel process
  */
-void main(void);
+void main(u32_t magic, multiboot_t *mbt);
 
 /**
  * alert for kernel failure
