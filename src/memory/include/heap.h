@@ -3,6 +3,7 @@
 
 #include "../../config/config.h"
 #include "../../config/status.h"
+#include "../include/memory.h"
 
 #define HEAP_BLOCK_TABLE_ENTRY_TAKEN    0x01
 #define HEAP_BLOCK_TABLE_ENTRY_FREE     0x00
@@ -23,8 +24,8 @@ struct heap
     void* start_address;
 };
 
-int heap_create(struct heap* heap, void* ptr, void* end, struct heap_table* table);
-void* heap_malloc(struct heap* heap, u32_t size);
-void heap_free(struct heap* heap, void* ptr);
+int create(struct heap* heap, void* ptr, void* end, struct heap_table* table);
+void* malloc(struct heap* heap, u32_t size);
+void free(struct heap* heap, void* ptr);
 
 #endif

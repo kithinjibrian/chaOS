@@ -9,11 +9,11 @@ struct heap_table kernel_heap_table;
 void kheap_init()
 {
     int total_table_entries = CHAOS_HEAP_SIZE_BYTES / CHAOS_HEAP_BLOCK_SIZE;
-    kernel_heap_table.entries = (u32_t*)(CHAOS_HEAP_TABLE_ADDRESS);
+    kernel_heap_table.entries = (u8_t*)(CHAOS_HEAP_TABLE_ADDRESS);
     kernel_heap_table.total = total_table_entries;
 
     void* end = (void*)(CHAOS_HEAP_ADDRESS + CHAOS_HEAP_SIZE_BYTES);
-    int res = heap_create(&kernel_heap, (void*)(CHAOS_HEAP_ADDRESS), end, &kernel_heap_table);
+    int res = create(&kernel_heap, (void*)(CHAOS_HEAP_ADDRESS), end, &kernel_heap_table);
     if (res < 0)
     {
         print("Failed to create heap\n");
@@ -23,7 +23,7 @@ void kheap_init()
 
 void* kmalloc(u32_t size)
 {
-    return heap_malloc(&kernel_heap, size);
+    return malloc(&kernel_heap, size);
 }
 
 void* kzalloc(u32_t size)
@@ -38,5 +38,5 @@ void* kzalloc(u32_t size)
 
 void kfree(void* ptr)
 {
-    heap_free(&kernel_heap, ptr);
+    free(&kernel_heap, ptr);
 }

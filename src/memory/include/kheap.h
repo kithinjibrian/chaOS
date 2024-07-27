@@ -5,6 +5,7 @@
  * Kernel Heap
  */
 
+#include "../../drivers/include/vga.h"  /* print() */
 #include "../../libc/include/type.h"
 
 void kheap_init();

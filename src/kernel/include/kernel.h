@@ -6,6 +6,7 @@
 #include "../../cpu/include/timer.h"
 #include "../../drivers/include/vga.h"
 #include "../../drivers/include/keyboard.h"
+#include "../../memory/include/memory.h"
 
 /**
  * main kernel process
