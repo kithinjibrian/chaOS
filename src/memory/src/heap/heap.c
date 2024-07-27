@@ -1,4 +1,5 @@
 #include "../../include/heap.h"
+#include "../../include/memory.h"
 #include <stdbool.h>
 
 static int heap_validate_table(void* ptr, void* end, struct heap_table* table)

@@ -18,5 +18,6 @@
 		"stdio.h": "c",
 		"io.h": "c",
 		"system_error": "c"
-	}
+	},
+	"workbench.activityBar.iconClickBehavior": "toggle"
 }

@@ -6,7 +6,7 @@
  * @param dest pointer to destination
  * @param count number of bytes
  */
-void memcpy(char *source, char *dest, u32_t count)
+void kmemcpy(char *source, char *dest, u32_t count)
 {
 	int i;
 	for (i = 0; i < count; i++)
@@ -19,7 +19,7 @@ void memcpy(char *source, char *dest, u32_t count)
  * @param val value to fill
  * @param count number of bytes
  */
-void memset(void *dest, int val, u32_t count)
+void kmemset(void *dest, int val, u32_t count)
 {
 	u8_t *ptr = (u8_t *)dest;
 	while (count--)
@@ -30,7 +30,7 @@ void memset(void *dest, int val, u32_t count)
  * compare values of two memory blocks
  * @param count compare upto this number of bytes
  */
-int memcmp(void* s1, void* s2, int count)
+int kmemcmp(void* s1, void* s2, int count)
 {
     char* c1 = s1;
     char* c2 = s2;
