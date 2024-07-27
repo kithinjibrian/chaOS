@@ -52,6 +52,7 @@ extern u32_t initial_page_dir[1024];
 
 typedef u32_t virtual_address;
 typedef u32_t physical_address;
+typedef u32_t pagetable_address;
 
 typedef struct page
 {
@@ -68,7 +69,7 @@ typedef struct page
 	u32_t frame : 20;
 } page_t;
 
-typedef struct
+typedef struct page_dir
 {
 	u32_t present : 1;
 	u32_t read_write : 1;
@@ -83,19 +84,23 @@ typedef struct
 	u32_t frame : 20;
 } page_dir_t;
 
-typedef struct page_table_t
+typedef struct page_table
 {
 	page_t entries[1024];
 } page_table_t;
 
-typedef struct page_dir_table_t
+typedef struct page_dir_table
 {
 	page_dir_t entries[1024];
 } page_dir_table_t;
 
 void init_page();
-bool alloc_page(page_t page);
+void print_page_dir();
+void invalidate(u32_t vaddr);
+bool alloc_page(page_t *page);
 bool unmap_page(virtual_address vaddr);
+page_t *get_page(virtual_address vaddr);
+void print_page_table(page_table_t *page_table);
 bool map_page(physical_address paddr, virtual_address vaddr);
 
 #endif
