@@ -7,6 +7,8 @@ void panic(const char *msg)
 
 void main(void)
 {
+	clear();
+	print("into kernel");
 	init_gdt();
 	init_idt();
 	irq_reg_handler(1, &keyboard_handler);

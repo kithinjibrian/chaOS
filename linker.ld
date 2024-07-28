@@ -1,5 +1,5 @@
 /* specifies format of final executable binary */
-
+/* 
 ENTRY(start)
 OUTPUT_FORMAT(elf32-i386)
 
@@ -41,6 +41,42 @@ SECTIONS
 		*(.bss)
 	}
 
+	.asm ALIGN(4K): AT(ADDR(.asm) - 0xC0000000){
+		*(.asm)
+	}
+
 	kernel_vend = .;
 	kernel_pend = . - 0xC0000000;
+} */
+
+ENTRY(start)
+OUTPUT_FORMAT(elf32-i386)
+SECTIONS
+{
+    . = 1M;
+    .text : ALIGN(4096)
+    {
+        *(.text)
+    }
+
+    .asm : ALIGN(4096)
+    {
+        *(.asm)
+    }
+
+    .rodata : ALIGN(4096)
+    {
+        *(.rodata)
+    }
+
+    .data : ALIGN(4096)
+    {
+        *(.data)
+    }
+
+    .bss : ALIGN(4096)
+    {
+        *(COMMON)
+        *(.bss)
+    }
 }

@@ -58,4 +58,5 @@ clean:
 	$(MAKE) -C $(SRC_MEMORY_DIR) clean
 	rm -f $(IMAGE)
 	rm -f $(EXECUTABLE)
+	rm -f iso/boot/kernel
 	clear
