@@ -79,6 +79,9 @@ typedef struct rectangle
 	int length;
 } rectangle_t, *rectangle_ptr;
 
+/**
+ * Also include the name of the parameters for clarity 
+ */
 typedef int (*area_fun)(int length, int width);
 
 typedef enum
