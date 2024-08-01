@@ -2,15 +2,16 @@
 
 /**
  * Copy a block of memory
- * @param source pointer to source
  * @param dest pointer to destination
+ * @param source pointer to source
  * @param count number of bytes
  */
-void memcpy(char *source, char *dest, u32_t count)
+void memcpy(void *dest, void *source, u32_t count)
 {
-	int i;
-	for (i = 0; i < count; i++)
-		*(dest + 1) = *(source + 1);
+	u8_t *d = (u8_t *)dest;
+	u8_t *s = (u8_t *)source;
+	while (count--)
+		*d++ = *s++;
 }
 
 /**
