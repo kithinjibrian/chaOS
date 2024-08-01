@@ -1,3 +1,6 @@
+bits 32
+align 4
+
 KERNEL_VBASE equ 0xC0000000	; Kernel is placed at 3gb
 KERNEL_PAGE_NUM equ (KERNEL_VBASE >> 22) ; The page that contains the kernel. page 768
 
@@ -14,12 +17,19 @@ section .multiboot
 	dd MBOOT_MAGIC
 	dd MBOOT_FLAGS
 	dd MBOOT_CHECKSUM
-	dd 0, 0, 0, 0, 0
+	; Graphics request
+	dd 0x00000000 ; header_addr
+	dd 0x00000000 ; load_addr
+	dd 0x00000000 ; load_end_addr
+	dd 0x00000000 ; bss_end_addr
+	dd 0x00000000 ; entry_addr
 
 	dd 0 ; near graphic mode
-	dd 800 ; screen width
-	dd 600 ; screen height
+	dd 0 ; screen width
+	dd 0 ; screen height
 	dd 32 ; screen depth
+
+extern kernel_pend_g, kernel_vend_g, kernel_vstart_g, kernel_pstart_g
 
 section .bss
 align 16
@@ -54,8 +64,8 @@ extern main
 higher_half:
     ; Unmap the identity-mapped first 4MB of physical address space. It should not be needed
     ; anymore.
-	mov dword [initial_page_dir], 0
-	invlpg [0]
+	; mov dword [initial_page_dir], 0
+	; invlpg [0]
 
 	; set up the stack
 	mov esp, stack_top
@@ -90,10 +100,10 @@ initial_page_dir:
     ; bit 0: P  The kernel page is present.
     ; This entry must be here -- otherwise the kernel will crash immediately after paging is
     ; enabled because it can't fetch the next instruction! It's ok to unmap this page later
-	dd 0x00000083
+	dd 0x00000081
 	times (KERNEL_PAGE_NUM - 1) dd 0	; Pages before kernel space.
 	; This page directory entry defines a 4MB page containing the kernel.
 	dd 0x00000083
-	dd 0x00000083
 
-	times (1024 - KERNEL_PAGE_NUM - 2) dd 0 ; Pages after the kernel image.
+	times (1024 - KERNEL_PAGE_NUM - 1) dd 0 ; Pages after the kernel image.
+
