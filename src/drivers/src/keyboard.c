@@ -1,7 +1,7 @@
 #include "keyboard.h"
 
-bool caps_on_g = false;
-bool shift_on_g = false;
+bool_e caps_on_g = FALSE;
+bool_e shift_on_g = FALSE;
 
 const u32_t UNKNOWN = 0xFFFFFFFF;
 const u32_t F1 = 0xFFFFFFFF - 1;
@@ -172,3 +172,13 @@ void keyboard_handler(registers_t regs)
 		break;
 	}
 }
+
+int __INIT__ init_keyboard()
+{
+	irq_reg_handler(1, &keyboard_handler);
+	return 0;
+}
+
+module_init(init_keyboard);
+module_author("Kithinji Brian");
+module_description("Simple keyboard driver that prints to VGA screen.");

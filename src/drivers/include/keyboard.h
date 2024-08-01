@@ -3,9 +3,9 @@
 
 #include "vga.h"
 #include "port.h"
+#include "../../cpu/include/idt.h"
 #include "../../libc/include/type.h"
 #include "../../libc/include/mstring.h"
-
-void keyboard_handler(registers_t regs);
+#include "../../libc/include/module.h"
 
 #endif
