@@ -42,6 +42,13 @@ static inline void INIT_LIST_HEAD(list_t *list)
 	list->prev = list;
 }
 
+/**
+ * __list_add__ - add a new entry between two known consecutive entries
+ * 
+ * @new: new entry to be added
+ * @prev: previous entry
+ * @next: next entry
+ */
 static inline void __list_add__(list_t *new, list_t *prev, list_t *next)
 {
 	new->next = next;
@@ -50,6 +57,11 @@ static inline void __list_add__(list_t *new, list_t *prev, list_t *next)
 	next->prev = new;
 }
 
+/**
+ * list_add - add a new entry
+ * @new: new entry to be added
+ * @head: list head to add it before
+ */
 static inline void list_add(list_t *new, list_t *head)
 {
 	__list_add__(new, head, head->next);
