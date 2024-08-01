@@ -27,6 +27,15 @@
 		"kmalloc.h": "c",
 		"frame.h": "c",
 		"mmath.h": "c",
-		"random": "c"
+		"random": "c",
+		"typeinfo": "c",
+		"executor": "c",
+		"functional": "c",
+		"tuple": "c",
+		"type_traits": "c",
+		"utility": "c",
+		"list.h": "c",
+		"massert.h": "c",
+		"module.h": "c"
 	}
 }

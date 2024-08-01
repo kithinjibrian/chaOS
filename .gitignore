@@ -8,6 +8,8 @@
 *.elf
 *.iso
 *.ini
+*.txt
+
 
 # Linker output
 *.ilk
@@ -52,3 +54,5 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+linker_generated.ld

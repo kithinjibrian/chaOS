@@ -2,7 +2,6 @@
 #define TIMER_H
 
 #include "idt.h"
-
-void init_timer(u32_t freq);
+#include "../../libc/include/module.h"
 
 #endif

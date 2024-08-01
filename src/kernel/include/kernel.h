@@ -1,37 +1,32 @@
 #ifndef KERNEL_H
 #define KERNEL_H
 
-#include "page.h"
 #include "pmm.h"
+#include "page.h"
+#include "kmalloc.h"
 
 #include "../../cpu/include/gdt.h"
 #include "../../cpu/include/idt.h"
 #include "../../cpu/include/timer.h"
+#include "../../libc/include/module.h"
 #include "../../drivers/include/vga.h"
 #include "../../drivers/include/keyboard.h"
+
+extern u32_t initcall_start_g[];
+extern u32_t initcall0_start_g[];
+extern u32_t initcall1_start_g[];
+extern u32_t initcall2_start_g[];
+extern u32_t initcall3_start_g[];
+extern u32_t initcall4_start_g[];
+extern u32_t initcall5_start_g[];
+extern u32_t initcall6_start_g[];
+extern u32_t initcall7_start_g[];
+extern u32_t initcall_end_g[];
 
 /**
  * main kernel process
  */
 void main(u32_t magic, multiboot_t *mbt);
-
-/**
- * alert for kernel failure
- */
-void panic(const char *);
-
-/**
- * error handling mechanism
- * cast error to void poiter and return
- */
-#define ERROR(value) (void *)(value)
-/**
- * integer error reporting mechanism
- */
-#define ERROR_I(value) (int)(value)
-/**
- * boolean error reporting
- */
-#define ISERR(value) ((int)value < 0)
+void do_initcall();
 
 #endif

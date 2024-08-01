@@ -24,7 +24,7 @@ static void gdt_set_gate(
 /**
  * Initialize the Global Descriptor Table
  */
-void init_gdt(void)
+int init_gdt(void)
 {
 	gdt_ptr_g.limit = (sizeof(gdt_entry_t) * 5) - 1;
 	gdt_ptr_g.base = (u32_t)&gdt_entries_g;
@@ -37,4 +37,6 @@ void init_gdt(void)
 	gdt_set_gate(4, 0, 0xFFFFFFFF, 0xF2, 0xCF);
 
 	gdt_flush((u32_t)&gdt_ptr_g);
+
+	return 0;
 }

@@ -8,7 +8,7 @@
 #define MAX_ROWS 25
 #define RED_ON_WHITE 0xf4
 #define WHITE_ON_BLACK 0x0f
-#define VIDEO_ADDRESS 0xC00B8000
+#define VIDEO_ADDRESS 0xB8000
 
 /* Screen i/o ports */
 #define REG_SCREEN_CTRL 0x3d4

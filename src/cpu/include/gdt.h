@@ -6,7 +6,7 @@
 // remove padding from structs between the pragma directives
 #pragma pack(push, 1)
 
-typedef struct gdt_entry_t
+typedef struct gdt_entry
 {
 	u16_t limit_low;
 	u16_t base_low;
@@ -16,7 +16,7 @@ typedef struct gdt_entry_t
 	u8_t base_high;
 } gdt_entry_t;
 
-typedef struct gdt_ptr_t
+typedef struct gdt_ptr
 {
 	u16_t limit;
 	u32_t base;
@@ -26,6 +26,6 @@ typedef struct gdt_ptr_t
 
 extern void gdt_flush(u32_t);
 
-void init_gdt(void);
+int init_gdt(void);
 
 #endif

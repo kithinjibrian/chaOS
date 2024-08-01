@@ -15,7 +15,7 @@ static void set_idt_gate(int num, u32_t base, u16_t sel, u8_t flags)
 /**
  * Initialize the idt_g
  */
-void init_idt(void)
+int init_idt(void)
 {
 	idt_ptr_g.limit = (sizeof(idt_entry_t) * 256) - 1;
 	idt_ptr_g.base = (u32_t)&idt_g;
@@ -93,6 +93,8 @@ void init_idt(void)
 	set_idt_gate(47, (u32_t)irq15, 0x08, 0x8E);
 
 	idt_flush((u32_t)&idt_ptr_g);
+
+	return 0;
 }
 
 unsigned char *exception_messages[] = {

@@ -9,7 +9,7 @@
 // remove padding from structs between the pragma directives
 #pragma pack(push, 1)
 
-typedef struct idt_entry_t
+typedef struct idt_entry
 {
 	u16_t base_lo;
 	u16_t sel;
@@ -18,7 +18,7 @@ typedef struct idt_entry_t
 	u16_t base_hi;
 } idt_entry_t;
 
-typedef struct idt_ptr_t
+typedef struct idt_ptr
 {
 	u16_t limit;
 	u32_t base;
@@ -80,7 +80,8 @@ extern void irq13();
 extern void irq14();
 extern void irq15();
 
-void init_idt(void);
+int init_idt(void);
+
 void isr_handler(registers_t regs);
 void irq_handler(registers_t regs);
 

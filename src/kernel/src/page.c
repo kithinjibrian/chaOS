@@ -3,7 +3,7 @@
 /**
  * All address above 0xc0000000 are kernel address
  */
-void init_page()
+int init_page(void)
 {
 	/**
 	 * Recursively map all pages in the initial page table
@@ -13,38 +13,29 @@ void init_page()
 							 PAGE_PRESENT |
 							 PAGE_WRITE;
 
-	/**
-	 * Remap kernel memory region
-	 */
-	physical_address pt_kernel_addr = (physical_address)pmm_alloc_block();
-	page_table_t *pt_kernel = (page_table_t *)(KERNEL_VBASE + pt_kernel_addr);
+	physical_address pt_pmm_bitmap_addr = (physical_address)kmalloc_pa(PAGE_SIZE);
+	initial_page_dir[PD_INDEX(BITMAP)] = pt_pmm_bitmap_addr |
+										 PAGE_PRESENT |
+										 PAGE_WRITE;
 
-	memset(pt_kernel, 0, sizeof(page_table_t));
-
-	/**
-	 * This are the pages the kernel has used so far
-	 * Assuming only the kernel has allocated these
-	 */
-	int kernel_pages = PT_INDEX(placement_address_g) - PT_INDEX(KERNEL_LOAD_ADDR);
-
-	for (int i = 0, frame = KERNEL_LOAD_ADDR; i < 1024; i++, frame += PAGE_SIZE)
+	page_table_t *page_bitmap = (page_table_t *)GET_PAGE_ADDRESS(BITMAP);
+	for (int i = 0; i < 1024; i++)
 	{
-		if (i < kernel_pages)
-		{
-			pt_kernel->entries[i].present = 1;
-			pt_kernel->entries[i].frame = frame >> 12;
-		}
-		else
-		{
-			pt_kernel->entries[i].present = 0;
-		}
+		page_bitmap->entries[i].present = 0;
 	}
 
-	initial_page_dir[PD_INDEX(KERNEL_VBASE)] = pt_kernel_addr |
-											   PAGE_PRESENT |
-											   PAGE_WRITE;
+	physical_address pt_heap_addr = (physical_address)kmalloc_pa(PAGE_SIZE);
+	initial_page_dir[PD_INDEX(KERNEL_HEAP)] = pt_heap_addr |
+											  PAGE_PRESENT |
+											  PAGE_WRITE;
 
-	print("pt kernel addr: %x\n", initial_page_dir[PD_INDEX(KERNEL_VBASE)]);
+	page_table_t *page_heap = (page_table_t *)GET_PAGE_ADDRESS(KERNEL_HEAP);
+	for (int i = 0; i < 1024; i++)
+	{
+		page_heap->entries[i].present = 0;
+	}
+
+	return 0;
 }
 
 void print_page_table(page_table_t *page_table)
@@ -53,10 +44,10 @@ void print_page_table(page_table_t *page_table)
 	{
 		print("page number: %d, "
 			  "page present: %d, "
-			  "page write: %d, "
+			  "page addr: %x, "
 			  "page frame: %d\n",
 			  i, page_table->entries[i].present,
-			  page_table->entries[i].read_write,
+			  page_table->entries[i].frame * PAGE_SIZE,
 			  page_table->entries[i].frame);
 	}
 }
@@ -95,7 +86,7 @@ page_t *get_page(virtual_address vaddr)
 	return NULL;
 }
 
-bool alloc_page(page_t *page)
+bool_e alloc_page(page_t *page)
 {
 	if (page->present)
 	{
@@ -116,13 +107,13 @@ bool alloc_page(page_t *page)
 	return TRUE;
 }
 
-bool free_page(page_t page)
+bool_e free_page(page_t page)
 {
 	// pmm_free_block((void *)page.frame);
 	return TRUE;
 }
 
-bool map_page(physical_address paddr, virtual_address vaddr)
+bool_e map_page(physical_address paddr, virtual_address vaddr, int flags)
 {
 	/**
 	 * Virtual address of the page directory
@@ -144,8 +135,8 @@ bool map_page(physical_address paddr, virtual_address vaddr)
 
 		if (!page_table->entries[PT_INDEX(vaddr)].present)
 		{
-			page_table->entries[PT_INDEX(vaddr)].present = 1;
-			page_table->entries[PT_INDEX(vaddr)].read_write = 1;
+			page_table->entries[PT_INDEX(vaddr)].present = (flags & PAGE_PRESENT) ? 1 : 0;
+			page_table->entries[PT_INDEX(vaddr)].read_write = (flags & PAGE_WRITE) ? 1 : 0;
 			page_table->entries[PT_INDEX(vaddr)].frame = paddr >> 12;
 		}
 		else
@@ -167,8 +158,8 @@ bool map_page(physical_address paddr, virtual_address vaddr)
 		{
 			if (i == PT_INDEX(vaddr))
 			{
-				page_table->entries[i].present = 1;
-				page_table->entries[i].read_write = 1;
+				page_table->entries[i].present = (flags & PAGE_PRESENT) ? 1 : 0;
+				page_table->entries[i].read_write = (flags & PAGE_WRITE) ? 1 : 0;
 				page_table->entries[i].frame = paddr >> 12;
 			}
 			else
@@ -181,7 +172,7 @@ bool map_page(physical_address paddr, virtual_address vaddr)
 	return TRUE;
 }
 
-bool unmap_page(virtual_address vaddr)
+bool_e unmap_page(virtual_address vaddr)
 {
 	u32_t *page_dir = (u32_t *)PAGE_DIR;
 	u32_t pde = page_dir[PD_INDEX(vaddr)];
