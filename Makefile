@@ -1,5 +1,9 @@
+LINKER_FILENAME = linker
+LINKER_IN = $(LINKER_FILENAME).ld
+LINKER_OUT = $(LINKER_FILENAME)_generated.ld
+
 LD = i686-elf-ld
-LDFLAGS = -T linker.ld
+LDFLAGS = -T $(LINKER_OUT)
 EXECUTABLE = chaos
 IMAGE = chaos.iso
 
@@ -21,7 +25,10 @@ BOOT_OBJS = $(shell find $(BUILD_BOOT_DIR) -type f -name '*.o')
 KERNEL_OBJS = $(shell find $(BUILD_KERNEL_DIR) -type f -name '*.o')
 DRIVERS_OBJS = $(shell find $(BUILD_DRIVERS_DIR) -type f -name '*.o')
 
-all: boot libc drivers cpu kernel $(EXECUTABLE)
+all: pcld boot libc drivers cpu kernel $(EXECUTABLE)
+
+pcld:
+	gcc -E -P -x c $(LINKER_IN) -o $(LINKER_OUT)
 
 boot:
 	$(MAKE) -C $(SRC_BOOT_DIR)
@@ -50,3 +57,4 @@ clean:
 	$(MAKE) -C $(SRC_DRIVERS_DIR) clean
 	rm -f $(IMAGE)
 	rm -f $(EXECUTABLE)
+	rm -f $(LINKER_OUT)
