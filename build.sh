@@ -37,6 +37,11 @@ elif [ "$1" == "run" ]; then
 	build
 	qemu-system-i386 -m 256M -hda "$IMAGE"
 
+elif [ "$1" == "force-run" ]; then
+	clean
+	build
+	qemu-system-i386 -m 256M -hda "$IMAGE"
+
 elif [ "$1" == "bochs" ]; then
 	build
 	bochs -f bochsrc
