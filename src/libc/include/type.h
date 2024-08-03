@@ -41,6 +41,12 @@ typedef struct list
 	struct list *next, *prev;
 } list_t;
 
+typedef struct va_list
+{
+	u8_t *start;
+	u8_t *current;
+} va_list_t;
+
 typedef struct registers_t
 {
 	u32_t ds;
