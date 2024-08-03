@@ -1,10 +1,10 @@
 #ifndef IDT_H
 #define IDT_H
 
-#include "../../libc/include/type.h"
-#include "../../drivers/include/vga.h"
-#include "../../libc/include/mstring.h"
-#include "../../drivers/include/port.h"
+#include "vga.h"
+#include "type.h"
+#include "port.h"
+#include "mstring.h"
 
 // remove padding from structs between the pragma directives
 #pragma pack(push, 1)

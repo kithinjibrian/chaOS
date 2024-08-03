@@ -1,7 +1,7 @@
 #ifndef GDT_H
 #define GDT_H
 
-#include "../../libc/include/type.h"
+#include "type.h"
 
 // remove padding from structs between the pragma directives
 #pragma pack(push, 1)

@@ -2,6 +2,6 @@
 #define TIMER_H
 
 #include "idt.h"
-#include "../../libc/include/module.h"
+#include "module.h"
 
 #endif

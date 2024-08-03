@@ -3,9 +3,9 @@
 
 #include "pmm.h"
 
-#include "../../cpu/include/idt.h"
-#include "../../drivers/include/vga.h"
-#include "../../libc/include/multiboot.h"
+#include "idt.h"
+#include "vga.h"
+#include "multiboot.h"
 
 #define PAGE_SIZE 0x1000
 

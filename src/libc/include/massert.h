@@ -2,7 +2,7 @@
 #define ASSERT_H
 
 #include "type.h"
-#include "../../drivers/include/vga.h"
+#include "vga.h"
 
 void __assert_fail__(string_t, string_t, u32_t, string_t, bool_e);
 

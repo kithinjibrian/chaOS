@@ -1,11 +1,11 @@
 #ifndef KMALLOC_H
 #define KMALLOC_H
 
+#include "vga.h"
 #include "page.h"
-#include "../../libc/include/type.h"
-#include "../../libc/include/list.h"
-#include "../../drivers/include/vga.h"
-#include "../../libc/include/massert.h"
+#include "type.h"
+#include "list.h"
+#include "massert.h"
 
 typedef struct pool
 {
@@ -15,7 +15,6 @@ typedef struct pool
 	list_t list;
 } pool_t, *pool_ptr_t;
 
-void init_heap(void);
 void *kmalloc(u32_t size);
 
 void *kmalloc_pa(u32_t size);

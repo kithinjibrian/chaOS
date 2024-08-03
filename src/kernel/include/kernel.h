@@ -2,15 +2,14 @@
 #define KERNEL_H
 
 #include "pmm.h"
+#include "gdt.h"
+#include "idt.h"
+#include "vga.h"
 #include "page.h"
+#include "timer.h"
+#include "module.h"
 #include "kmalloc.h"
-
-#include "../../cpu/include/gdt.h"
-#include "../../cpu/include/idt.h"
-#include "../../cpu/include/timer.h"
-#include "../../libc/include/module.h"
-#include "../../drivers/include/vga.h"
-#include "../../drivers/include/keyboard.h"
+#include "keyboard.h"
 
 extern u32_t initcall_start_g[];
 extern u32_t initcall0_start_g[];

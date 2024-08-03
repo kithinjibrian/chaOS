@@ -3,9 +3,9 @@
 
 #include "vga.h"
 #include "port.h"
-#include "../../cpu/include/idt.h"
-#include "../../libc/include/type.h"
-#include "../../libc/include/mstring.h"
-#include "../../libc/include/module.h"
+#include "idt.h"
+#include "type.h"
+#include "mstring.h"
+#include "module.h"
 
 #endif

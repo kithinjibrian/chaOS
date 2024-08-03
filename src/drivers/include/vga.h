@@ -2,7 +2,7 @@
 #define VGA_H
 
 #include "port.h"
-#include "../../libc/include/mstring.h"
+#include "mstring.h"
 
 #define MAX_COLS 80
 #define MAX_ROWS 25

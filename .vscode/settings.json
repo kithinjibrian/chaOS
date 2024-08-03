@@ -36,6 +36,10 @@
 		"utility": "c",
 		"list.h": "c",
 		"massert.h": "c",
-		"module.h": "c"
+		"module.h": "c",
+		"stdint.h": "c",
+		"deque": "c",
+		"vector": "c",
+		"string_view": "c"
 	}
 }

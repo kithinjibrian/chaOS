@@ -1,14 +1,12 @@
 #ifndef PMM_H
 #define PMM_H
 
+#include "vga.h"
+#include "type.h"
+#include "mmath.h"
+#include "bitmap.h"
 #include "kmalloc.h"
-
-#include "../../libc/include/type.h"
-#include "../../libc/include/mmath.h"
-#include "../../libc/include/bitmap.h"
-#include "../../libc/include/multiboot.h"
-
-#include "../../drivers/include/vga.h"
+#include "multiboot.h"
 
 #define MBLOCK_SIZE 4096
 #define BITMAP 0xD0000000
