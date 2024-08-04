@@ -11,9 +11,17 @@ HOME="."
 KERNEL="chaos"
 IMAGE="chaos.iso"
 DEST="iso"
+LINKER="linker"
+LINKER_IN="${LINKER}.ld"
+LINKER_OUT="${LINKER}_generated.ld"
+
+generate_linker() {
+	gcc -E -P -I "$HOME/linker" -x c "$LINKER_IN" -o "$LINKER_OUT"
+}
 
 build() {
 	echo "Building $KERNEL"
+	generate_linker
 	make -C "$HOME"
 
 	if [ -f "$HOME/$KERNEL" ]; then
@@ -41,6 +49,9 @@ elif [ "$1" == "force-run" ]; then
 	clean
 	build
 	qemu-system-i386 -m 256M -hda "$IMAGE"
+
+elif [ "$1" == "linker" ]; then
+	generate_linker
 
 elif [ "$1" == "bochs" ]; then
 	build

@@ -1,0 +1,86 @@
+#define LOAD_OFFSET 0xC0000000
+
+#define DATA_DATA *(.data)
+
+#define TEXT_TEXT *(.text)
+
+#define RODATA_DATA *(.rodata)
+
+#define INIT_TEXT *(.init.text)
+
+#define EXIT_TEXT *(.exit.text)
+
+#define BSS_BSS *(.bss)
+
+#define init_calls_level(level)		\
+	initcall##level##_start_g = .;	\
+	KEEP(*(.initcall##level.init)) 
+
+#define INIT_CALLS			\
+    initcall_start_g = .;	\
+    init_calls_level(0)		\
+    init_calls_level(1)		\
+    init_calls_level(2)		\
+    init_calls_level(3)		\
+    init_calls_level(4)		\
+    init_calls_level(5)		\
+    init_calls_level(6)		\
+    init_calls_level(7)		\
+    initcall_end_g = .;
+
+#define RW_DATA												\
+	.data ALIGN(4K): AT(ADDR(.data) - LOAD_OFFSET) {		\
+		DATA_DATA											\
+	}
+
+#define RO_DATA												\
+	.rodata ALIGN(4K): AT(ADDR(.rodata) - LOAD_OFFSET) {	\
+		RODATA_DATA											\
+	}
+
+#define TEXT												\
+	.text ALIGN(4K): AT(ADDR(.text) - LOAD_OFFSET) {		\
+		text_start_g = .;									\
+		TEXT_TEXT											\
+		text_end_g = .;										\
+	}
+
+#define INIT_TEXT_SECTION											\
+	.init.text ALIGN(4K) : AT(ADDR(.init.text) - LOAD_OFFSET) {		\
+		inittext_start_g = .;										\
+		INIT_TEXT													\
+		inittext_end_g = .;											\
+	}
+
+/**
+ * Exit section will be discarded at run time
+ */
+#define EXIT_TEXT_SECTION											\
+	.exit.text ALIGN(4K) : AT(ADDR(.exit.text) - LOAD_OFFSET) {		\
+		EXIT_TEXT													\
+	}
+
+#define INIT_DATA_SECTION											\
+    .init.data ALIGN(4K) : AT(ADDR(.init.data) - LOAD_OFFSET) {		\
+		INIT_CALLS													\
+    }
+
+#define BSS_SECTION													\
+	.bss ALIGN(4K): AT(ADDR(.bss) - LOAD_OFFSET) {					\
+		bss_start_g = .;											\
+		BSS_BSS														\
+		bss_end_g = .;												\
+	}
+
+#define COMMON_DISCARDS		\
+    *(.comment)             \
+    *(.eh_frame)            \
+    *(.gnu.version*)        \
+	*(.modinfo)             \
+    *(.note.gnu.build-id)    
+
+#define DISCARDS            \
+	/DISCARD/ : {           \
+	    COMMON_DISCARDS     \
+	}
+
