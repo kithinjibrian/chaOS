@@ -3,14 +3,19 @@ CFLAGS = -g -ffreestanding
 
 SRC_DIR = src
 BUILD_DIR = build
-INCLUDE_DIR = include
+
+INCLUDE_DIRS = \
+    include 	\
+    ../drivers/include
+
+INCLUDES = $(patsubst %,-I%,$(INCLUDE_DIRS))
 
 SRCS = $(shell find $(SRC_DIR) -type f -name '*.c')
 OBJS = $(patsubst $(SRC_DIR)/%, $(BUILD_DIR)/%, $(SRCS:.c=.o))
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) -I$(INCLUDE_DIR) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 all: $(OBJS)
 

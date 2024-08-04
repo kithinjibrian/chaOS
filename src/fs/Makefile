@@ -6,8 +6,8 @@ BUILD_DIR = build
 
 INCLUDE_DIRS = \
     include 	\
-    ../cpu/include \
     ../libc/include \
+    ../drivers/include
 
 INCLUDES = $(patsubst %,-I%,$(INCLUDE_DIRS))
 

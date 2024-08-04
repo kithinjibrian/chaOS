@@ -6,9 +6,13 @@ NASM_FLAGS = -f elf32
 
 SRC_DIR = src
 BUILD_DIR = build
-INCLUDE_DIR = include
-LIBC_INCLUDE_DIR = ../libc/include
-VGA_INCLUDE_DIR = ../drivers/include
+
+INCLUDE_DIRS = \
+    include 	\
+    ../libc/include \
+    ../drivers/include \
+
+INCLUDES = $(patsubst %,-I%,$(INCLUDE_DIRS))
 
 C_SRCS = $(shell find $(SRC_DIR) -type f -name '*.c')
 ASM_SRCS = $(shell find $(SRC_DIR) -type f -name '*.asm')
@@ -20,7 +24,7 @@ OBJS = $(C_OBJS) $(ASM_OBJS)
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) -I$(INCLUDE_DIR) -I$(LIBC_INCLUDE_DIR) -I$(VGA_INCLUDE_DIR) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.asm
 	@mkdir -p $(@D)
