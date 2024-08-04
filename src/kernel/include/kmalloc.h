@@ -15,6 +15,7 @@ typedef struct pool
 	list_t list;
 } pool_t, *pool_ptr_t;
 
+void kfree(void *ptr);
 void *kmalloc(u32_t size);
 
 void *kmalloc_pa(u32_t size);

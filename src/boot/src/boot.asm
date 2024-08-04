@@ -24,10 +24,10 @@ section .multiboot
 	dd 0x00000000 ; bss_end_addr
 	dd 0x00000000 ; entry_addr
 
-	dd 0 ; near graphic mode
-	dd 0 ; screen width
-	dd 0 ; screen height
-	dd 32 ; screen depth
+	dd 0 	; near graphic mode
+	dd 640	; screen width
+	dd 480 	; screen height
+	dd 32 	; screen depth
 
 extern kernel_pend_g, kernel_vend_g, kernel_vstart_g, kernel_pstart_g
 
@@ -104,6 +104,7 @@ initial_page_dir:
 	times (KERNEL_PAGE_NUM - 1) dd 0	; Pages before kernel space.
 	; This page directory entry defines a 4MB page containing the kernel.
 	dd 0x00000083
+	dd 0x00000083
 
-	times (1024 - KERNEL_PAGE_NUM - 1) dd 0 ; Pages after the kernel image.
+	times (1024 - KERNEL_PAGE_NUM - 2) dd 0 ; Pages after the kernel image.
 
