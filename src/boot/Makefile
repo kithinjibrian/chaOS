@@ -1,5 +1,5 @@
 NASM = nasm
-NASM_FLAGS = -f elf32
+NASM_FLAGS = -f elf32 -g
 
 SRC_DIR = src
 BUILD_DIR = build

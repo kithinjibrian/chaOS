@@ -1,8 +1,8 @@
 CC = i686-elf-gcc
-CFLAGS = -g -ffreestanding
+CFLAGS = -std=c11 -g -ffreestanding -Wall -Wextra -Werror -pedantic
 
 NASM = nasm
-NASM_FLAGS = -f elf32
+NASM_FLAGS = -f elf32 -g
 
 SRC_DIR = src
 BUILD_DIR = build

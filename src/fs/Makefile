@@ -1,5 +1,5 @@
 CC = i686-elf-gcc
-CFLAGS = -g -ffreestanding
+CFLAGS =  -std=c11 -g -ffreestanding -Wall -Wextra -Werror -pedantic
 
 SRC_DIR = src
 BUILD_DIR = build
