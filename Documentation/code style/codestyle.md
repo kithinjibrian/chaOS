@@ -14,7 +14,7 @@ However, descriptive names should be concise and to the point. If a name is long
 
 Examples:
 
-```
+```c
 // password hash
 ❌ char *password_hash; 
 ✅ char *pw_hash; /* The name is brief but descriptive and understandable. */
@@ -30,7 +30,7 @@ x, y, z: Prefered for coordinates
 ### Global variables
 
 Global variables should be distinguished from local variables by appending `_g` to their names. This makes them stand out and easily identifiable.
-```
+```c
 int array_g[];
 ```
 
@@ -38,20 +38,20 @@ int array_g[];
 
 Object-like macros should use uppercase letters.
 
-```
+```c
 #define PI 3.14
 ```
 
 Function-like macros should use lowercase letters.
 
-```
+```c
 #define square(l) (l * l)
 ```
 
 ### Enums
 All entries in an enum should be in uppercase.
 
-```
+```c
 enum weekend
 {
 	FRIDAY,
@@ -70,7 +70,7 @@ When using typedef to create type aliases, follow these naming conventions:
 5. Append `_u` for unions.
 6. Append `_a` for arrays.
 
-```
+```c
 typedef const char *string_t;
 
 typedef struct rectangle
@@ -103,7 +103,7 @@ typedef int array_a[5];
 ## 3. Comments
 When you declare a function or a function-like macro, it should have a "JSDoc" comment.
 
-```
+```c
 /**
  * Get the area of a rectangle.
  * @param length - The length of the rectangle
@@ -133,7 +133,7 @@ When you declare a function or a function-like macro, it should have a "JSDoc" c
  ## 4. Memory management
 Any object allocated on the heap by a function should be freed before the function returns. If the function has multiple exit points, it should centralize cleanup using goto statements to ensure that deallocation is handled consistently in one place.
 
-```
+```c
 void cfree(void **obj)
 {
 	if(obj && *obj)
@@ -167,7 +167,7 @@ If the allocated object should be shared between multiple functions or threads, 
 
 Here is an example of an object being shared between functions.
 
-```
+```c
 typedef struct string
 {
 	int ref;
