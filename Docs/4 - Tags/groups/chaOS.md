@@ -1,0 +1,12 @@
+[[dsa]]
+[[docs]]
+[[booting]]
+[[interrupts]]
+[[file_system]]
+[[kernel_heap]]
+[[4 - Tags/tags/contributing]]
+[[multitasking]]
+[[coding_style]]
+[[kernel_syncing]]
+[[memory_manager]]
+
