@@ -19,7 +19,7 @@ There are 4 stages a document can be in:
 1. #drafting: This is the initial stage where you write the first version of the document.
 2. #revising: Once you have a draft, you can review it for clarity, accuracy, and completeness. Make necessary changes to improve the document.
 3. #editing: After revising, the document can be edited for grammar, spelling, and style.
-4. #published: Once the document has been reviewed and edited, it can be published for public access.
+4. #published: Once the document has been reviewed and edited, it moves to the published stage. This is the final form of the document. At this point, the document should be polished, accurate, and complete, providing valuable information to anyone reading it.
 
 ## Tagging and Linking
 
