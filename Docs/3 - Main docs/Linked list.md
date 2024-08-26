@@ -11,3 +11,4 @@ Tags: [[linked_list]]
 Kithinji Brian
 
 # References
+[[Kernel data structures linked list]]
