@@ -2,21 +2,13 @@
 #define KMALLOC_H
 
 #include "vga.h"
-#include "page.h"
 #include "type.h"
-#include "list.h"
-#include "massert.h"
-
-typedef struct pool
-{
-	u8_t *buffer;
-	u32_t size;
-	u32_t csize;
-	list_t list;
-} pool_t, *pool_ptr_t;
+#include "dlist.h"
+#include "assert.h"
 
 void kfree(void *ptr);
-void *kmalloc(u32_t size);
+void *kmalloc(size_t size);
+void *krealloc(void *ptr, size_t size);
 
 void *kmalloc_pa(u32_t size);
 void *kmalloc_pp(u32_t size, u32_t *phys);

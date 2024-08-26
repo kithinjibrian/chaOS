@@ -12,7 +12,7 @@
 #define PAGE_DIR 0xFFFFF000
 #define TEMP_DIR 0xFFFFE000
 #define KERNEL_DIR 0xFFF00000
-#define KERNEL_HEAP 0xE0000000
+#define KERNEL_HEAP 0xD0000000
 #define KERNEL_VBASE 0xC0000000
 #define PAGE_FIRST_DIR 0xFFC00000
 #define KERNEL_LOAD_ADDR 0x00100000
@@ -23,11 +23,29 @@
 #define PT_INDEX(x) (((x) >> 12) & 0x3FF)
 #define GET_PHYSICAL_ADDRESS(addr) (*addr & ~0xFFF)
 
-#define GET_PAGE_ADDRESS(vaddr) (PAGE_FIRST_DIR + (PD_INDEX(vaddr) * PAGE_SIZE))
+/**
+ * Get the page directory virtual address of a virtual address
+ *
+ * Confusing huh :)
+ *
+ * The page directory has its own address space because of recursive mapping
+ * This macro thus returns an address in the page directory space
+ *
+ * @param vaddr virtual address
+ */
+#define GET_PAGE_ADDRESS(vaddr) (PAGE_FIRST_DIR + (PD_INDEX(vaddr) << 12))
 
-#define PAGE_PRESENT (1 << 0)
-#define PAGE_WRITE (1 << 1)
-#define PAGE_PS (1 << 7)
+/**
+ * Assumes you already the know the index of the page table you want
+ * the virtual address of
+ *
+ * @param pd_index
+ */
+#define GET_PAGE_ADDRESS2(pd_index) (PAGE_FIRST_DIR + (pd_index << 12))
+
+#define PAGE_PRESENT 0x1
+#define PAGE_WRITE 0x2
+#define PAGE_USER 0x4
 
 /**
  * Trick compiler into thinking this is an array
@@ -95,11 +113,18 @@ typedef struct page_dir_table
 
 int init_page(void);
 void print_page_dir();
+physical_address pd_read();
 void invalidate(u32_t vaddr);
 bool_e alloc_page(page_t *page);
-bool_e unmap_page(virtual_address vaddr);
+physical_address create_page_dir();
+physical_address clone_page_dir();
+void pd_load(physical_address pdir);
 page_t *get_page(virtual_address vaddr);
+bool_e unmap_page(virtual_address vaddr);
+physical_address vtop(virtual_address vaddr);
+virtual_address ptov(physical_address paddr);
 void print_page_table(page_table_t *page_table);
 bool_e map_page(physical_address paddr, virtual_address vaddr, int flags);
+bool_e create_page_table(u32_t *page_dir, virtual_address vaddr, int flags);
 
 #endif

@@ -1,4 +1,4 @@
-#include "massert.h"
+#include "assert.h"
 
 void __assert_fail__(string_t expr, string_t file, u32_t line, string_t func, bool_e panic)
 {
@@ -19,6 +19,6 @@ void __assert_fail__(string_t expr, string_t file, u32_t line, string_t func, bo
 
 	if (panic)
 	{
-		asm volatile("cli \n hlt");
+		__asm__ __volatile__("cli \n hlt");
 	}
 }

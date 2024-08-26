@@ -6,7 +6,7 @@ BUILD_DIR = build
 
 INCLUDE_DIRS = \
     include 	\
-    ../drivers/include
+    ../drivers/include	\
 
 INCLUDES = $(patsubst %,-I%,$(INCLUDE_DIRS))
 

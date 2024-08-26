@@ -3,13 +3,86 @@
 idt_entry_t idt_g[256];
 idt_ptr_t idt_ptr_g;
 
-static void set_idt_gate(int num, u32_t base, u16_t sel, u8_t flags)
+const char *exception_messages[] = {
+	"Division By Zero",
+	"Debug",
+	"Non Maskable Interrupt",
+	"Breakpoint",
+	"Overflow",
+	"Bound Range Exceeded",
+	"Invalid Opcode",
+	"Device Not Available",
+
+	"Double Fault",
+	"Coprocessor Segment Overrun",
+	"Invalid TSS",
+	"Segment Not Present",
+	"Stack Fault",
+	"General Protection Fault",
+	"Page Fault",
+	"Unknown Interrupt",
+
+	"Coprocessor Fault",
+	"Alignment Check",
+	"Machine Check",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+};
+
+fun_handler isr_callbacks[32] = {
+	0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0};
+
+fun_handler irq_callbacks[16] = {
+	0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0};
+
+irq_desc_t irq_descs[NO_IRQs] = {0};
+
+static void set_idt_gate(int num, u32_t base, u16_t kernel_cs, u8_t flags)
 {
 	idt_g[num].base_lo = base & 0xFFFF;
 	idt_g[num].base_hi = (base >> 16) & 0xFFFF;
-	idt_g[num].sel = sel;
-	idt_g[num].always0 = 0;
-	idt_g[num].flags = flags | 0x60;
+	idt_g[num].kernel_cs = kernel_cs;
+	idt_g[num].reserved = 0;
+	idt_g[num].attributes = flags | 0x60;
+}
+
+void irq_remap()
+{
+	/**
+	 * Remap master and slave PICs
+	 * Master: 0x20, data: 0x21
+	 * Slave: 0xA0, data: 0xA1
+	 */
+	port_byte_out(PIC1_COMMAND, 0x11);
+	port_byte_out(PIC2_COMMAND, 0x11);
+
+	port_byte_out(PIC1_DATA, 0x20);
+	port_byte_out(PIC2_DATA, 0x28);
+
+	port_byte_out(PIC1_DATA, 0x04);
+	port_byte_out(PIC2_DATA, 0x02);
+
+	port_byte_out(PIC1_DATA, 0x01);
+	port_byte_out(PIC2_DATA, 0x01);
+
+	port_byte_out(PIC1_DATA, 0x0);
+	port_byte_out(PIC2_DATA, 0x0);
 }
 
 /**
@@ -22,25 +95,7 @@ int init_idt(void)
 
 	memset(&idt_g, 0, sizeof(idt_entry_t) * 256);
 
-	/**
-	 * Remap master and slave PICs
-	 * Master: 0x20, data: 0x21
-	 * Slave: 0xA0, data: 0xA1
-	 */
-	port_byte_out(0x20, 0x11);
-	port_byte_out(0xA0, 0x11);
-
-	port_byte_out(0x21, 0x20);
-	port_byte_out(0xA1, 0x28);
-
-	port_byte_out(0x21, 0x04);
-	port_byte_out(0xA1, 0x02);
-
-	port_byte_out(0x21, 0x01);
-	port_byte_out(0xA1, 0x01);
-
-	port_byte_out(0x21, 0x0);
-	port_byte_out(0xA1, 0x0);
+	irq_remap();
 
 	set_idt_gate(0, (u32_t)isr0, 0x08, 0x8E);
 	set_idt_gate(1, (u32_t)isr1, 0x08, 0x8E);
@@ -92,112 +147,98 @@ int init_idt(void)
 	set_idt_gate(46, (u32_t)irq14, 0x08, 0x8E);
 	set_idt_gate(47, (u32_t)irq15, 0x08, 0x8E);
 
+	set_idt_gate(SYSCALL, (u32_t)syscall_handler, 0x08, 0x8E);
+
 	idt_flush((u32_t)&idt_ptr_g);
+
+	sti();
 
 	return 0;
 }
 
-unsigned char *exception_messages[] = {
-	"Division By Zero",
-	"Debug",
-	"Non Maskable Interrupt",
-	"Breakpoint",
-	"Overflow",
-	"Bound Range Exceeded",
-	"Invalid Opcode",
-	"Device Not Available",
-
-	"Double Fault",
-	"Coprocessor Segment Overrun",
-	"Invalid TSS",
-	"Segment Not Present",
-	"Stack Fault",
-	"General Protection Fault",
-	"Page Fault",
-	"Unknown Interrupt",
-
-	"Coprocessor Fault",
-	"Alignment Check",
-	"Machine Check",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-};
-
-/**
- * handle interrupt request
- * @param regs registers
- */
-void isr_handler(registers_t regs)
+void register_isr_handler(int isr, fun_handler handler)
 {
-	if (regs.int_no < 32)
-	{
-		print(exception_messages[regs.int_no]);
-		while (1)
-			;
-	}
+	isr_callbacks[isr] = handler;
 }
 
-fun_handler_t ih[16] = {
-	0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0};
+void isr_unreg_handler(int isr)
+{
+	isr_callbacks[isr] = 0;
+}
 
 /**
  * register interrupt handler
  * @param irq interrupt number
  * @param handler interrupt handler
  */
-void irq_reg_handler(int irq, fun_handler_t handler)
+void register_irq_handler(int irq, fun_handler handler)
 {
-	ih[irq] = handler;
+	irq_callbacks[irq] = handler;
+}
+
+void register_irq(u32_t irq, fun_handler handler, u32_t flags, const char *name)
+{
+	irqaction_t *irqaction = (irqaction_t *)kmalloc(sizeof(irqaction_t));
+	irqaction->irq = irq;
+	irqaction->flags = flags;
+	irqaction->handler = handler;
+	irqaction->name = name;
 }
 
 void irq_unreg_handler(int irq)
 {
-	ih[irq] = 0;
+	irq_callbacks[irq] = 0;
+}
+
+void pic_send_eoi(int int_no)
+{
+	if (int_no >= 32 && int_no < 48)
+	{
+		if (int_no >= 40)
+		{
+			port_byte_out(PIC2_COMMAND, PIC_EOI);
+		}
+
+		port_byte_out(PIC1_COMMAND, PIC_EOI);
+	}
 }
 
 /**
  * handle interrupt request
  * @param regs registers
  */
-void irq_handler(registers_t regs)
+void trap(registers_t *regs)
 {
-	/**
-	 *	resize interrupt number so that it is in the range 0-15
-	 *	i.e The timer interrupt is 32 but becomes 0
-	 */
-	fun_handler_t handler = ih[regs.int_no - 32];
 
-	if (handler)
+	if (regs->int_no < 32)
 	{
-		handler(regs);
+		if (isr_callbacks[regs->int_no])
+		{
+			isr_callbacks[regs->int_no](regs);
+		}
+		else
+		{
+			print("Interrupt: %s\n", exception_messages[regs->int_no]);
+		}
+	}
+	else if (regs->int_no >= IRQ0 && regs->int_no < 48)
+	{
+		pic_send_eoi(regs->int_no);
+
+		if (irq_callbacks[regs->int_no - IRQ0])
+		{
+			irq_callbacks[regs->int_no - IRQ0](regs);
+		}
+		else
+		{
+			goto default_trap;
+		}
+	}
+	else if (regs->int_no == SYSCALL)
+	{
+		syscall_handler(regs);
 	}
 
-	/**
-	 * send EOI (end of interrupt) to interrupt controller
-	 */
-	if (regs.int_no >= 40)
-	{
-		/**
-		 * send reset signal to slave
-		 */
-		port_byte_out(0xA0, 0x20);
-	}
-
-	/**
-	 * send reset signal to master
-	 */
-	port_byte_out(0x20, 0x20);
+default_trap:
+	return;
 }

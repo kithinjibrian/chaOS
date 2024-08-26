@@ -2,6 +2,7 @@
 #define MULTIBOOT_H
 
 #include "type.h"
+#include "macro.h"
 
 typedef struct multiboot_aout_symtable
 {
@@ -99,8 +100,6 @@ typedef struct multiboot
 	};
 } multiboot_t;
 
-#pragma pack(push, 1)
-
 typedef struct multiboot_mmap_entry
 {
 	u32_t size;
@@ -115,8 +114,14 @@ typedef struct multiboot_mmap_entry
 #define MULTIBOOT_MEMORY_NVS 4
 #define MULTIBOOT_MEMORY_BADRAM 5
 	u32_t type;
-} multiboot_mmap_entry_t;
+} __PACKED__ multiboot_mmap_entry_t;
 
-#pragma pack(pop)
+typedef struct multiboot_module
+{
+	u32_t mod_start;
+	u32_t mod_end;
+	u32_t string;
+	u32_t reserved;
+} __PACKED__ multiboot_module_t;
 
 #endif

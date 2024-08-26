@@ -1,6 +1,6 @@
-#include "mstring.h"
+#include "string.h"
 
-void reverse(char str[], int length)
+static void reverse(char str[], int length)
 {
 	int start = 0;
 	int end = length - 1;
@@ -94,4 +94,93 @@ void htoa(u32_t hex, char *str)
 	}
 
 	str[i] = '\0'; // Null-terminate the string
+}
+
+/**
+ * Return length of the string
+ * @param str string
+ *
+ * @return length of the string
+ */
+size_t strlen(const char *str)
+{
+	size_t len = 0;
+	while (*str++)
+	{
+		len++;
+	}
+	return len;
+}
+
+/**
+ * Compare two strings
+ * @param str1 first string
+ * @param str2 second string
+ *
+ * @return TRUE if the strings are equal, FALSE otherwise
+ */
+bool_e strncmp(const char *str1, const char *str2, size_t len)
+{
+	for (size_t i = 0; i < len; i++)
+	{
+		if (str1[i] != str2[i])
+		{
+			return FALSE;
+		}
+	}
+	return TRUE;
+}
+
+/**
+ * Find the first occurrence of the character in the string
+ * @param str string
+ * @param c asci character
+ *
+ * @return pointer to the first occurrence of the character
+ * in the string or NULL if not found
+ */
+char *strchr(const char *str, int c)
+{
+	char ch = (char)c;
+
+	while (*str != '\0')
+	{
+		if (*str == ch)
+		{
+			return (char *)str;
+		}
+		str++;
+	}
+
+	if (ch == '\0')
+	{
+		return (char *)str;
+	}
+
+	return NULL;
+}
+
+/**
+ * Copy a string
+ * @param dest destination string
+ * @param src source string
+ *
+ * @return pointer to the destination string
+ */
+char *strncpy(char *dest, const char *src, size_t n)
+{
+	size_t i;
+
+	for (i = 0; i < n && src[i] != '\0'; i++)
+	{
+		dest[i] = src[i];
+	}
+
+	// Pad the rest of the destination string with null characters
+	for (; i < n; i++)
+	{
+		dest[i] = '\0';
+	}
+
+	return dest;
 }

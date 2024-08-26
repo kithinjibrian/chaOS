@@ -3,32 +3,23 @@
 static u32_t mem_size_g = 0;
 static u32_t used_blocks_g = 0;
 static u32_t max_blocks_g = 0;
-u32_t *mem_map_g = (u32_t *)BITMAP;
+
+/**
+ * This is very wasteful because we are assuming the ram is always 4GB
+ * but the other option is to try and allocate memory for the bitmap after the kernel space which I
+ * found to be very erronous.
+ */
+u32_t physical_bitmap[BITMAP_SIZE];
 
 static void map_memory();
 
-int init_pmm()
+int __INIT__ init_pmm()
 {
 	mem_size_g = mboot_g->mem_upper * 1024;
 	max_blocks_g = mem_size_g / MBLOCK_SIZE;
-
-	int n = CEIL(CEIL(max_blocks_g, 8), 0x1000);
-	void *a = kmalloc_pa(n << 12);
-
-	for (int i = 0; i < n; i++)
-	{
-		map_page((u32_t)a + (i << 12),
-				 BITMAP + (i << 12),
-				 PAGE_PRESENT | PAGE_WRITE);
-	}
-
 	used_blocks_g = max_blocks_g;
 
-	/**
-	 * set all memory blocks to used
-	 * Divide by 8 because each bit is a byte and memset only sets 1 byte
-	 */
-	memset(mem_map_g, 0xff, n << 12);
+	memset(physical_bitmap, 0xff, BITMAP_SIZE * sizeof(u32_t));
 
 	map_memory();
 
@@ -37,7 +28,7 @@ int init_pmm()
 
 static void map_memory()
 {
-	for (int a = 0; a < mboot_g->mmap_length; a += sizeof(multiboot_mmap_entry_t))
+	for (u32_t a = 0; a < mboot_g->mmap_length; a += sizeof(multiboot_mmap_entry_t))
 	{
 		multiboot_mmap_entry_t *entry = (multiboot_mmap_entry_t *)((mboot_g->mmap_addr + KERNEL_VBASE) + a);
 
@@ -53,12 +44,14 @@ static void map_memory()
 				 */
 				if (entry->addr_low == (u32_t)kernel_pstart_g)
 				{
-					print("addr: %x, len: %d, type: %d\n",
-						  entry->addr_low,
-						  entry->len_low,
-						  entry->type);
-
-					pmm_init_region(placement_address_g, entry->len_low);
+					/**
+					 * Skip the first 4mb where the kernel lives
+					 */
+					pmm_init_region(0x400000, entry->len_low);
+				}
+				else
+				{
+					pmm_init_region(entry->addr_low, entry->len_low);
 				}
 			}
 		}
@@ -72,7 +65,7 @@ void pmm_init_region(u32_t base, u32_t size)
 
 	for (; num_blocks > 0; num_blocks--, start++)
 	{
-		bit_clear_v32(mem_map_g, start);
+		bit_clear_v32(physical_bitmap, start);
 		used_blocks_g--;
 	}
 }
@@ -84,7 +77,7 @@ void pmm_deinit_region(u32_t base, u32_t size)
 
 	for (; num_blocks > 0; num_blocks--, start++)
 	{
-		bit_set_v32(mem_map_g, start);
+		bit_set_v32(physical_bitmap, start);
 		used_blocks_g++;
 	}
 }
@@ -96,14 +89,14 @@ void pmm_deinit_region(u32_t base, u32_t size)
  */
 void *pmm_alloc_block()
 {
-	int frame = bit_search_v32(mem_map_g, max_blocks_g, FALSE);
+	int frame = bit_search_v32(physical_bitmap, max_blocks_g, FALSE);
 
 	if (frame == -1)
 	{
 		return NULL;
 	}
 
-	bit_set_v32(mem_map_g, frame);
+	bit_set_v32(physical_bitmap, frame);
 	used_blocks_g++;
 
 	return (void *)(frame * MBLOCK_SIZE);
@@ -112,6 +105,6 @@ void *pmm_alloc_block()
 void pmm_free_block(void *block)
 {
 	int frame = CEIL((u32_t)block, MBLOCK_SIZE);
-	bit_clear_v32(mem_map_g, frame);
+	bit_clear_v32(physical_bitmap, frame);
 	used_blocks_g--;
 }

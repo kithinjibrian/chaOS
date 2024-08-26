@@ -108,7 +108,8 @@ void print(const char *fmt, ...)
 	/**
 	 * Get the pointer to the first argument
 	 */
-	int *p = (int *)(&fmt + 1);
+	va_list_t args;
+	va_start(args, fmt);
 
 	while (*fmt)
 	{
@@ -118,22 +119,25 @@ void print(const char *fmt, ...)
 			switch (*fmt)
 			{
 			case 'c':
-				char c = (char)*p;
+			{
+				char c = va_arg(args, char);
 				print_char(c);
 				break;
-
+			}
 			case 's':
-				char *s = (char *)*p;
+			{
+				char *s = va_arg(args, char *);
 				while (*s)
 				{
 					print_char(*s);
 					s++;
 				}
 				break;
+			}
 
 			case 'd':
 			{
-				int num = *p;
+				int num = va_arg(args, int);
 
 				/**
 				 *  a 32 bit integer is at most 11 digits plus the sign
@@ -150,11 +154,25 @@ void print(const char *fmt, ...)
 
 			case 'x':
 			{
-				u32_t hex = (u32_t)*p;
+				u32_t hex = va_arg(args, u32_t);
 				char ac[11];
 				htoa(hex, ac);
 				for (int i = 0; i < 11; i++)
 					print_char(ac[i]);
+				break;
+			}
+
+			case 'p':
+			{
+				u32_t hex = va_arg(args, u32_t);
+				if (hex == 0)
+				{
+					print("(nil)");
+				}
+				else
+				{
+					print("%x", hex);
+				}
 				break;
 			}
 
@@ -163,8 +181,6 @@ void print(const char *fmt, ...)
 				print_char(*fmt);
 				break;
 			}
-
-			p++;
 		}
 		else
 		{
@@ -172,4 +188,6 @@ void print(const char *fmt, ...)
 		}
 		fmt++;
 	}
+
+	va_end(args);
 }

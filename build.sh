@@ -15,6 +15,14 @@ LINKER="linker"
 LINKER_IN="${LINKER}.ld"
 LINKER_OUT="${LINKER}_generated.ld"
 
+bmodules()
+{
+	MODULE="${HOME}/src/modules"
+	make -C "$MODULE"
+
+	mv "$MODULE/a" "$HOME/$DEST/boot/modules/a"
+}
+
 generate_linker() {
 	gcc -E -P -I "$HOME/linker" -x c "$LINKER_IN" -o "$LINKER_OUT"
 }
@@ -43,15 +51,18 @@ if [ "$1" == "clean" ]; then
 
 elif [ "$1" == "run" ]; then
 	build
-	qemu-system-i386 -m 256M -hda "$IMAGE"
+	qemu-system-i386 -m 256M -cdrom "$IMAGE"
 
 elif [ "$1" == "force-run" ]; then
 	clean
 	build
-	qemu-system-i386 -m 256M -hda "$IMAGE"
+	qemu-system-i386 -m 256M -cdrom "$IMAGE"
 
 elif [ "$1" == "linker" ]; then
 	generate_linker
+
+elif [ "$1" == "modules" ]; then
+	bmodules
 
 elif [ "$1" == "bochs" ]; then
 	build
@@ -59,7 +70,7 @@ elif [ "$1" == "bochs" ]; then
 
 elif [ "$1" == "debug" ]; then
     build
-    qemu-system-i386 -hda "$IMAGE" -s &
+    qemu-system-i386 -cdrom "$IMAGE" -s &
 
 	 # Allow qemu to start
     sleep 1

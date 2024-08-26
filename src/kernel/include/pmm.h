@@ -2,14 +2,16 @@
 #define PMM_H
 
 #include "vga.h"
+#include "page.h"
 #include "type.h"
-#include "mmath.h"
+#include "math.h"
 #include "bitmap.h"
+#include "module.h"
 #include "kmalloc.h"
 #include "multiboot.h"
 
 #define MBLOCK_SIZE 4096
-#define BITMAP 0xD0000000
+#define BITMAP_SIZE 0x8000
 
 extern multiboot_t *mboot_g;
 extern u32_t placement_address_g;

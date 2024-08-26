@@ -3,13 +3,19 @@
 
 #define NULL ((void *)0)
 
+typedef signed char s8_t;
+typedef signed int s32_t;
+typedef signed long s64_t;
+typedef signed short s16_t;
+typedef signed long ssize_t;
+
 typedef unsigned char u8_t;
 typedef unsigned int u32_t;
 typedef unsigned long u64_t;
 typedef unsigned short u16_t;
-typedef const char *string_t;
+typedef unsigned long size_t;
 
-typedef unsigned int size_t;
+typedef const char *string_t;
 
 /**
  * void_fun - void function pointer
@@ -26,9 +32,14 @@ typedef void (*void_fun)(void);
  * @type:   the type of the struct this is embedded in.
  * @member: the name of the member within the struct.
  */
-#define container_of(ptr, type, member) ({                      \
-    const typeof( ((type *)0)->member ) *__mptr = (ptr);    	\
-    (type *)( (char *)__mptr - offsetof(type,member) ); })
+static inline void *__container_of__(const void *ptr, size_t offset)
+{
+	return (void *)((char *)ptr - offset);
+}
+
+#define container_of(ptr, type, member) (         \
+	(type *)__container_of__((const void *)(ptr), \
+							 offsetof(type, member)))
 
 typedef enum
 {
@@ -36,10 +47,15 @@ typedef enum
 	TRUE
 } bool_e;
 
-typedef struct list
+typedef struct dlist
 {
-	struct list *next, *prev;
-} list_t;
+	struct dlist *next, *prev;
+} dlist_t;
+
+typedef struct slist
+{
+	struct slist *next;
+} slist_t;
 
 typedef struct va_list
 {
@@ -47,12 +63,46 @@ typedef struct va_list
 	u8_t *current;
 } va_list_t;
 
-typedef struct registers_t
+typedef struct array
 {
-	u32_t ds;
+	// array buffer
+	u8_t *array;
+	// reference counter
+	size_t ref;
+	// size of each element
+	size_t size;
+	// number of elements
+	size_t count;
+	// index for tracking the current element
+	size_t index;
+	// length of the array
+	size_t length;
+} array_t;
+
+typedef void (*fun_free)(void *ptr);
+typedef void *(*fun_malloc)(size_t size);
+typedef void *(*fun_realloc)(void *ptr, size_t size);
+
+typedef struct allocator
+{
+	fun_free free;
+	fun_malloc malloc;
+	fun_realloc realloc;
+} allocator_t;
+
+/**
+ * registers - x86 registers
+ */
+typedef struct registers
+{
+	// Segment registers (16 bytes)
+	u32_t gs, fs, es, ds;
+	// General-Purpose Registers
 	u32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;
+	// Interrupt and Error Code:
 	u32_t int_no, err_code;
-	u32_t eip, cs, eflags, user_esp, user_ss;
-} registers_t;
+	// Instruction Pointer and Flags:
+	u32_t eip, cs, eflags, user_esp, ss;
+} __attribute__((packed)) registers_t;
 
 #endif

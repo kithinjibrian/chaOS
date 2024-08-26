@@ -4,29 +4,78 @@
 #include "vga.h"
 #include "type.h"
 #include "port.h"
-#include "mstring.h"
+#include "macro.h"
+#include "string.h"
+#include "kmalloc.h"
 
-// remove padding from structs between the pragma directives
-#pragma pack(push, 1)
+#define NUM_SYSCALLS 3
+
+#define SYSCALL 128
+
+#define PIC1 0x20
+#define PIC2 0xA0
+
+#define PIC1_COMMAND PIC1
+#define PIC1_DATA (PIC1 + 1)
+
+#define PIC2_COMMAND PIC2
+#define PIC2_DATA (PIC2 + 1)
+
+#define PIC_EOI 0x20
+
+#define IRQ0 32
+#define IRQ_TIMER 0
+#define IRQ_KEYBOARD 1
+
+#define NO_IRQs 16
+
+/**
+ * Enables interrupts
+ */
+static inline void sti()
+{
+	__asm__ __volatile__("sti");
+}
+
+/**
+ * Disables interrupts
+ */
+static inline void cli()
+{
+	__asm__ __volatile__("cli");
+}
+
+typedef void (*fun_handler)(registers_t *);
 
 typedef struct idt_entry
 {
 	u16_t base_lo;
-	u16_t sel;
-	u8_t always0;
-	u8_t flags;
+	u16_t kernel_cs;
+	u8_t reserved;
+	u8_t attributes;
 	u16_t base_hi;
-} idt_entry_t;
+} __PACKED__ idt_entry_t;
 
 typedef struct idt_ptr
 {
 	u16_t limit;
 	u32_t base;
-} idt_ptr_t;
+} __PACKED__ idt_ptr_t;
 
-#pragma pack(pop)
+typedef struct irqaction
+{
+	u32_t irq;
+	u32_t flags;
+	struct irq *next;
+	const char *name;
+	fun_handler handler;
+} irqaction_t;
 
-typedef void (*fun_handler_t)(registers_t);
+typedef struct irq_desc
+{
+	const char *name;
+	struct irqaction *action;
+} irq_desc_t;
 
 extern void idt_flush(u32_t);
 
@@ -82,10 +131,16 @@ extern void irq15();
 
 int init_idt(void);
 
-void isr_handler(registers_t regs);
-void irq_handler(registers_t regs);
+void trap(registers_t *regs);
+
+void isr_unreg_handler(int isr);
+void register_isr_handler(int isr, fun_handler handler);
 
 void irq_unreg_handler(int irq);
-void irq_reg_handler(int irq, fun_handler_t handler);
+void register_irq_handler(int irq, fun_handler handler);
+
+void register_irq(u32_t irq, fun_handler handler, u32_t flags, const char *name);
+
+void syscall_handler(registers_t *regs);
 
 #endif

@@ -37,42 +37,7 @@ const u32_t PRINTSCN = 0xFFFFFFFF - 30;
 const u32_t SCROLLLOCK = 0xFFFFFFFF - 31;
 const u32_t PAUSEBREAK = 0xFFFFFFFF - 32;
 
-const u32_t shift_up[128] = {
-	UNKNOWN, ESC,
-	//
-	'!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '\b',
-	//
-	'\t', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '{', '}', '\n',
-	//
-	CTRL, 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ':', '"', '~', LSHIFT,
-	//
-	'\\', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '<', '>', '?', RSHIFT,
-	//
-	'*', ALT, ' ', CAPSLOCK, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10,
-	//
-	NUMLOCK, SCROLLLOCK, HOME, UP, PAGEUP,
-	//
-	'-',
-	//
-	LEFT, UNKNOWN, RIGHT,
-	//
-	'+',
-	//
-	END, DOWN, PAGEDOWN,
-	//
-	INSERT, DELETE, UNKNOWN, UNKNOWN, UNKNOWN, F11, F12, UNKNOWN,
-	//
-	UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
-	//
-	UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
-	//
-	UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
-	//
-	UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
-	//
-	UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN};
-
-const u32_t shift_down[128] = {
+const u32_t keymap[128] = {
 	UNKNOWN, ESC,
 	//
 	'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b',
@@ -107,8 +72,65 @@ const u32_t shift_down[128] = {
 	//
 	UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN};
 
-void keyboard_handler(registers_t regs)
+char shift(char ch)
 {
+	if (ch >= 'a' && ch <= 'z')
+	{
+		return ch - 32;
+	}
+
+	switch (ch)
+	{
+	case '`':
+		return '~';
+	case '1':
+		return '!';
+	case '2':
+		return '@';
+	case '3':
+		return '#';
+	case '4':
+		return '$';
+	case '5':
+		return '%';
+	case '6':
+		return '^';
+	case '7':
+		return '&';
+	case '8':
+		return '*';
+	case '9':
+		return '(';
+	case '0':
+		return ')';
+	case '-':
+		return '_';
+	case '=':
+		return '+';
+	case '[':
+		return '{';
+	case ']':
+		return '}';
+	case ';':
+		return ':';
+	case '\'':
+		return '"';
+	case ',':
+		return '<';
+	case '.':
+		return '>';
+	case '/':
+		return '?';
+	case '\\':
+		return '|';
+	}
+
+	return ch;
+}
+
+void keyboard_handler(registers_t *regs __UNUSED__)
+{
+
 	u8_t scan_code = port_byte_in(0x60) & 0x7F;
 	u8_t press = port_byte_in(0x60) & 0x80;
 
@@ -149,11 +171,11 @@ void keyboard_handler(registers_t regs)
 			char ch;
 			if (shift_on_g)
 			{
-				ch = shift_up[scan_code];
+				ch = shift(keymap[scan_code]);
 			}
 			else
 			{
-				ch = shift_down[scan_code];
+				ch = keymap[scan_code];
 			}
 
 			if (caps_on_g && ch >= 'a' && ch <= 'z')
@@ -166,7 +188,6 @@ void keyboard_handler(registers_t regs)
 				/* convert to lower case */
 				ch += 32;
 			}
-
 			print("%c", ch);
 		}
 		break;
@@ -175,7 +196,7 @@ void keyboard_handler(registers_t regs)
 
 int __INIT__ init_keyboard()
 {
-	irq_reg_handler(1, &keyboard_handler);
+	register_irq_handler(1, &keyboard_handler);
 	return 0;
 }
 

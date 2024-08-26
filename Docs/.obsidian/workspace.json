@@ -4,16 +4,16 @@
     "type": "split",
     "children": [
       {
-        "id": "8930574f0d80f08e",
+        "id": "148235be9af76a47",
         "type": "tabs",
         "children": [
           {
-            "id": "82ac3a8f99e0d497",
+            "id": "5bf3b96847d63fb6",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "4 - Tags/groups/kernel_heap(grp).md",
+                "file": "3 - Main docs/Coding style.md",
                 "mode": "source",
                 "backlinks": false,
                 "source": false
@@ -86,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "4 - Tags/groups/kernel_heap(grp).md",
+                "file": "3 - Main docs/Coding style.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "4 - Tags/groups/kernel_heap(grp).md",
+                "file": "3 - Main docs/Coding style.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "4 - Tags/groups/kernel_heap(grp).md"
+                "file": "3 - Main docs/Coding style.md"
               }
             }
           }
@@ -147,34 +147,34 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "82ac3a8f99e0d497",
+  "active": "5bf3b96847d63fb6",
   "lastOpenFiles": [
-    "4 - Tags/groups/interrupts(grp).md",
-    "4 - Tags/groups/file_system(grp).md",
-    "4 - Tags/groups/docs(grp).md",
-    "4 - Tags/groups/dsa(grp).md",
-    "4 - Tags/groups/circular_linked_list(grp).md",
-    "4 - Tags/groups/chaOS(grp).md",
+    "3 - Main docs/Contributing guide.md",
     "3 - Main docs/Linked list.md",
     "3 - Main docs/How to write the docs.md",
-    "3 - Main docs/How to read the docs.md",
     "3 - Main docs/dynamic array.md",
-    "3 - Main docs/Contributing.md",
     "3 - Main docs/Coding style.md",
-    "4 - Tags/tags/coding_style(tag).md",
-    "4 - Tags/tags/writing_docs(tag).md",
-    "4 - Tags/tags/reading_docs(tag).md",
-    "5 - Templates/main_doc(tpt).md",
-    "4 - Tags/tags/dynamic_array(tag).md",
-    "4 - Tags/groups/linked_list(grp).md",
-    "1 - Rough docs/Upcoming features.md",
-    "4 - Tags/tags/mutexes(tag).md",
-    "4 - Tags/groups/kernel_syncing(grp).md",
-    "4 - Tags/tags/semaphores(tag).md",
-    "4 - Tags/tags/spin_locks(tag).md",
-    "4 - Tags/tags/interrupt_handlers(tag).md",
-    "4 - Tags/groups/processes(grp).md",
-    "4 - Tags/tags/context_switching(tag).md",
+    "4 - Tags/tags/contributing.md",
+    "4 - Tags/tags/writing_docs.md",
+    "4 - Tags/tags/spin_locks.md",
+    "4 - Tags/tags/Singly_linked_list.md",
+    "4 - Tags/tags/semaphores.md",
+    "4 - Tags/tags/reading_docs.md",
+    "4 - Tags/tags/paging.md",
+    "4 - Tags/tags/mutexes.md",
+    "4 - Tags/tags/dynamic_array.md",
+    "4 - Tags/tags/interrupt_handlers.md",
+    "4 - Tags/tags/doubly_linked_list.md",
+    "4 - Tags/tags/context_switching.md",
+    "4 - Tags/tags/coding_style.md",
+    "4 - Tags/tags/circular_singly_linked_list.md",
+    "4 - Tags/tags/circular_doubly_linked_list.md",
+    "4 - Tags/tags/buddy_memory_allocator.md",
+    "4 - Tags/tags/booting.md",
+    "4 - Tags/tags/bitmap.md",
+    "4 - Tags/groups/wstfs.md",
+    "4 - Tags/groups/virtual_memory_manager.md",
+    "4 - Tags/groups/virtual_file_system.md",
     "2 - Source docs/Papers",
     "2 - Source docs/Other",
     "2 - Source docs/Videos",

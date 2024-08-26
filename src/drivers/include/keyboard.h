@@ -5,7 +5,7 @@
 #include "port.h"
 #include "idt.h"
 #include "type.h"
-#include "mstring.h"
+#include "string.h"
 #include "module.h"
 
 #endif

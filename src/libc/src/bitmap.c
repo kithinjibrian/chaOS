@@ -7,7 +7,7 @@
  *
  * @return the index of the bit
  */
-int bit_search_v8(u8_t bitmap[], int size, int value)
+int bit_search_v8(u8_t bitmap[], int size, u8_t value)
 {
 	for (int i = 0; i < size * 8; ++i)
 	{
@@ -46,7 +46,7 @@ void bit_print_v8(u8_t bitmap[], int start, int size)
  *
  * @return the index of the bit
  */
-int bit_search_v32(u32_t bitmap[], int size, int value)
+int bit_search_v32(u32_t bitmap[], int size, u32_t value)
 {
 	for (int i = 0; i < size * 32; ++i)
 	{

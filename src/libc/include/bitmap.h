@@ -47,7 +47,7 @@ static inline void bit_flip_v8(u8_t bitmap[], int index)
 }
 
 void bit_print_v8(u8_t bitmap[], int start, int size);
-int bit_search_v8(u8_t bitmap[], int size, int value);
+int bit_search_v8(u8_t bitmap[], int size, u8_t value);
 
 /**
  * Set bit at index in bitmap of size 32 bits
@@ -91,7 +91,7 @@ static inline void bit_flip_v32(u32_t bitmap[], int index)
 	bitmap[index / 32] ^= (1 << (index % 32));
 }
 
-int bit_search_v32(u32_t bitmap[], int size, int value);
+int bit_search_v32(u32_t bitmap[], int size, u32_t value);
 void bit_print_v32(u32_t bitmap[], u32_t start, u32_t size);
 
 #endif

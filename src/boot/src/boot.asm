@@ -1,12 +1,11 @@
 bits 32
-align 4
 
 KERNEL_VBASE equ 0xC0000000	; Kernel is placed at 3gb
 KERNEL_PAGE_NUM equ (KERNEL_VBASE >> 22) ; The page that contains the kernel. page 768
 
 MBOOT_PAGE_ALIGN equ 1 << 0
 MBOOT_MEM_INFO equ 1 << 1
-MBOOT_USE_GFX equ 0 ; to turn on when building graphics mode
+MBOOT_USE_GFX equ 0 ;1 << 2 ; to turn on when building graphics mode
 
 MBOOT_MAGIC equ 0x1badb002
 MBOOT_FLAGS equ MBOOT_PAGE_ALIGN | MBOOT_MEM_INFO | MBOOT_USE_GFX
@@ -24,18 +23,19 @@ section .multiboot
 	dd 0x00000000 ; bss_end_addr
 	dd 0x00000000 ; entry_addr
 
-	dd 0 	; near graphic mode
-	dd 640	; screen width
-	dd 480 	; screen height
+	dd 0                   ; framebuffer address (let GRUB decide)
+	dd 0                   ; framebuffer pitch
+	dd 0                   ; framebuffer width
+	dd 0                   ; framebuffer height
 	dd 32 	; screen depth
 
-extern kernel_pend_g, kernel_vend_g, kernel_vstart_g, kernel_pstart_g
-
+global stack_top_g
+global stack_bottom_g
 section .bss
-align 16
-stack_bottom:
-	resb 16384 ; reserve 16 KB stack on a 16-byte boundary
-stack_top:
+align 4
+stack_bottom_g:
+	resb 32768 ; This will make the stack occupy a 2 whole pages
+stack_top_g:
 
 section .boot
 global start
@@ -60,15 +60,15 @@ start:
 	jmp higher_half
 
 section .text
-extern main
+extern kernel_main
 higher_half:
     ; Unmap the identity-mapped first 4MB of physical address space. It should not be needed
     ; anymore.
-	; mov dword [initial_page_dir], 0
-	; invlpg [0]
+	mov dword [initial_page_dir], 0
+	invlpg [0]
 
 	; set up the stack
-	mov esp, stack_top
+	mov esp, stack_top_g
 
 	; pass Multiboot info structure -- WARNING: This is a physical address and may not be
     ; in the first 4MB!
@@ -77,11 +77,10 @@ higher_half:
 	; All addresses within the multiboot info will still have to be remapped
 	add ebx, KERNEL_VBASE
 	push ebx
-
 	; pass Multiboot magic number
 	push eax
 	xor ebp, ebp
-	call main
+	call kernel_main
 
 ; Avoid the CPU from executuing rogue instructions
 halt:
@@ -90,7 +89,7 @@ halt:
 
 
 section .data
-align 4096
+align 0x1000
 global initial_page_dir
 initial_page_dir:
     ; This page directory entry identity-maps the first 4MB of the 32-bit physical address space.
@@ -100,11 +99,10 @@ initial_page_dir:
     ; bit 0: P  The kernel page is present.
     ; This entry must be here -- otherwise the kernel will crash immediately after paging is
     ; enabled because it can't fetch the next instruction! It's ok to unmap this page later
-	dd 0x00000081
-	times (KERNEL_PAGE_NUM - 1) dd 0	; Pages before kernel space.
-	; This page directory entry defines a 4MB page containing the kernel.
 	dd 0x00000083
+	times (KERNEL_PAGE_NUM - 1) dd 0	; Pages before kernel space.
+	; This page directory entry defines a 4MB page(s) that maps to the same first 4mb mapped by pade_dir[0].
 	dd 0x00000083
 
-	times (1024 - KERNEL_PAGE_NUM - 2) dd 0 ; Pages after the kernel image.
+	times (1024 - KERNEL_PAGE_NUM - 1) dd 0 ; Pages after the kernel image.
 

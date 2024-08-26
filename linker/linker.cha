@@ -16,16 +16,17 @@
 	initcall##level##_start_g = .;	\
 	KEEP(*(.initcall##level.init)) 
 
-#define INIT_CALLS			\
-    initcall_start_g = .;	\
-    init_calls_level(0)		\
-    init_calls_level(1)		\
-    init_calls_level(2)		\
-    init_calls_level(3)		\
-    init_calls_level(4)		\
-    init_calls_level(5)		\
-    init_calls_level(6)		\
-    init_calls_level(7)		\
+#define INIT_CALLS					\
+    initcall_start_g = .;			\
+	KEEP(*(.initcallearly.init))	\
+    init_calls_level(0)				\
+    init_calls_level(1)				\
+    init_calls_level(2)				\
+    init_calls_level(3)				\
+    init_calls_level(4)				\
+    init_calls_level(5)				\
+    init_calls_level(6)				\
+    init_calls_level(7)				\
     initcall_end_g = .;
 
 #define RW_DATA												\

@@ -27,7 +27,6 @@ static void do_level_initcall(int level)
 
 void do_initcall()
 {
-	u32_t *fn;
 
 	int array_size = sizeof(initcall_levels) / sizeof(initcall_levels[0]);
 

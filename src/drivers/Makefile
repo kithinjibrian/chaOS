@@ -8,6 +8,7 @@ INCLUDE_DIRS = \
     include 	\
     ../cpu/include \
     ../libc/include \
+	../kernel/include \
 
 INCLUDES = $(patsubst %,-I%,$(INCLUDE_DIRS))
 
