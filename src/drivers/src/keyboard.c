@@ -196,10 +196,16 @@ void keyboard_handler(registers_t *regs __UNUSED__)
 
 int __INIT__ init_keyboard()
 {
-	register_irq_handler(1, &keyboard_handler);
+	register_irq(1, &keyboard_handler);
 	return 0;
 }
 
+void __EXIT__ exit_keyboard()
+{
+	free_irq(1);
+}
+
 module_init(init_keyboard);
+module_exit(exit_keyboard);
 module_author("Kithinji Brian");
 module_description("Simple keyboard driver that prints to VGA screen.");

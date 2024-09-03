@@ -12,6 +12,9 @@
 
 #define BSS_BSS *(.bss)
 
+#define EXIT_CALL							\
+	*(.exitcall.exit)
+
 #define init_calls_level(level)		\
 	initcall##level##_start_g = .;	\
 	KEEP(*(.initcall##level.init)) 

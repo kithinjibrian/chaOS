@@ -70,11 +70,17 @@ int __INIT__ init_mouse(void)
 	// mouse_write(0xF4); // Enable the mouse
 	// mouse_read();
 
-	register_irq_handler(12, &mouse_handler);
+	register_irq(12, &mouse_handler);
 
 	return 0;
 }
 
+void __EXIT__ exit_mouse(void)
+{
+	free_irq(12);
+}
+
 module_init(init_mouse);
+module_exit(exit_mouse);
 module_author("Kithinji Brian");
 module_description("Simple mouse driver.");

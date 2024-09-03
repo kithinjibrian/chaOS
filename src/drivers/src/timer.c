@@ -31,7 +31,7 @@ int __INIT__ init_timer(void)
 {
 	tick_g = 0;
 
-	register_irq_handler(0, &timer_callback);
+	register_irq(0, &timer_callback);
 	u32_t divisor = 1193180 / 1;
 
 	if (divisor > 65535)
@@ -62,6 +62,12 @@ void set_interval(fun_timer_cb cb, int delay)
 	dlist_add_tail(&wakeup_list_g, &(t->list));
 }
 
+void __EXIT__ exit_timer(void)
+{
+	free_irq(0);
+}
+
 module_init(init_timer);
+module_exit(exit_timer);
 module_author("Kithinji Brian");
 module_description("Simple timer.");
