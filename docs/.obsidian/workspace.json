@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3 - Main docs/Coding style.md",
+                "file": "2 - Source docs/Books/Linux Kernel Development, 3rd edition.md",
                 "mode": "source",
                 "backlinks": false,
                 "source": false
@@ -70,8 +70,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "40b9764ecf4c571d",
@@ -87,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3 - Main docs/Coding style.md",
+                "file": "2 - Source docs/Books/Linux Kernel Development, 3rd edition.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3 - Main docs/Coding style.md",
+                "file": "2 - Source docs/Books/Linux Kernel Development, 3rd edition.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -127,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3 - Main docs/Coding style.md"
+                "file": "2 - Source docs/Books/Linux Kernel Development, 3rd edition.md"
               }
             }
           }
@@ -150,13 +149,13 @@
   },
   "active": "332743d041fc0603",
   "lastOpenFiles": [
+    "3 - Main docs/How to write the docs.md",
+    "3 - Main docs/Coding style.md",
     "3 - Main docs/Contributing guide.md",
     "3 - Main docs/dynamic array.md",
     "3 - Main docs/How to read the docs.md",
-    "3 - Main docs/How to write the docs.md",
     "3 - Main docs/Linked list.md",
     "2 - Source docs/Articles/Kernel data structures linked list.md",
-    "3 - Main docs/Coding style.md",
     "2 - Source docs/Articles/linux insides.md",
     "2 - Source docs/Articles/Operating Systems Development - Errors, Exceptions, Interruptions.md",
     "2 - Source docs/Books/Linux Kernel Development, 3rd edition.md",
