@@ -1,7 +1,7 @@
 #ifndef KMALLOC_H
 #define KMALLOC_H
 
-#include "vga.h"
+#include "io.h"
 #include "type.h"
 #include "dlist.h"
 #include "assert.h"

@@ -1,7 +1,7 @@
 #ifndef BITMAP_H
 #define BITMAP_H
 
-#include "vga.h"
+#include "io.h"
 #include "type.h"
 
 /**

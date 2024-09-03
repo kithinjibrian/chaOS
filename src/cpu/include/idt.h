@@ -1,10 +1,11 @@
 #ifndef IDT_H
 #define IDT_H
 
-#include "vga.h"
+#include "io.h"
 #include "type.h"
 #include "port.h"
 #include "macro.h"
+#include "module.h"
 #include "string.h"
 #include "kmalloc.h"
 
@@ -71,10 +72,18 @@ typedef struct irqaction
 	fun_handler handler;
 } irqaction_t;
 
+typedef struct irq_data
+{
+	u32_t irq;
+	u32_t mask;
+} irq_data_t;
+
 typedef struct irq_desc
 {
 	const char *name;
+	struct irq_data irq_data;
 	struct irqaction *action;
+	void (*handle_irq)(struct irq_desc *desc);
 } irq_desc_t;
 
 extern void idt_flush(u32_t);
@@ -131,15 +140,17 @@ extern void irq15();
 
 int init_idt(void);
 
+int init_irq(void);
+
 void trap(registers_t *regs);
 
 void isr_unreg_handler(int isr);
 void register_isr_handler(int isr, fun_handler handler);
 
-void irq_unreg_handler(int irq);
-void register_irq_handler(int irq, fun_handler handler);
+void free_irq(int irq);
+void register_irq(int irq, fun_handler handler);
 
-void register_irq(u32_t irq, fun_handler handler, u32_t flags, const char *name);
+void register_irqu(u32_t irq, fun_handler handler, u32_t flags, const char *name);
 
 void syscall_handler(registers_t *regs);
 

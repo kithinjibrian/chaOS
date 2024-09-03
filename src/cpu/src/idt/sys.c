@@ -23,7 +23,7 @@ int call_syscall(registers_t regs, void *loc)
 
 void syscall_handler(registers_t *regs)
 {
-	// print("syscall %d\n", regs.eax);
+	// printf("syscall %d\n", regs.eax);
 	if (regs->eax >= NUM_SYSCALLS)
 	{
 		return;

@@ -1,12 +1,12 @@
 #ifndef KERNEL_H
 #define KERNEL_H
 
+#include "io.h"
 #include "pmm.h"
 #include "gdt.h"
 #include "idt.h"
-#include "vga.h"
 #include "page.h"
-#include "args.h"
+#include "arg.h"
 #include "timer.h"
 #include "array.h"
 #include "module.h"

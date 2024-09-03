@@ -38,7 +38,7 @@ void user()
 	{
 		n++;
 	}
-	print("kola: %d\n", n);
+	printf("kola: %d\n", n);
 }
 
 void user2()
@@ -48,5 +48,5 @@ void user2()
 	{
 		n++;
 	}
-	print("kola kola kola: %d\n", n);
+	printf("kola kola kola: %d\n", n);
 }

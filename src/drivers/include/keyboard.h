@@ -1,7 +1,7 @@
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
 
-#include "vga.h"
+#include "io.h"
 #include "port.h"
 #include "idt.h"
 #include "type.h"

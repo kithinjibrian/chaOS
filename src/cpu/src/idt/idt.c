@@ -171,12 +171,17 @@ void isr_unreg_handler(int isr)
  * @param irq interrupt number
  * @param handler interrupt handler
  */
-void register_irq_handler(int irq, fun_handler handler)
+void register_irq(int irq, fun_handler handler)
 {
 	irq_callbacks[irq] = handler;
 }
 
-void register_irq(u32_t irq, fun_handler handler, u32_t flags, const char *name)
+void free_irq(int irq)
+{
+	irq_callbacks[irq] = 0;
+}
+
+void register_irqu(u32_t irq, fun_handler handler, u32_t flags, const char *name)
 {
 	irqaction_t *irqaction = (irqaction_t *)kmalloc(sizeof(irqaction_t));
 	irqaction->irq = irq;
@@ -185,9 +190,28 @@ void register_irq(u32_t irq, fun_handler handler, u32_t flags, const char *name)
 	irqaction->name = name;
 }
 
-void irq_unreg_handler(int irq)
+void handle_bad_irq(irq_desc_t *desc)
 {
-	irq_callbacks[irq] = 0;
+	printf("Bad IRQ: %d\n", desc->irq_data.irq);
+}
+
+static int init_desc(irq_desc_t *desc, int irq, __UNUSED__ u32_t flags)
+{
+	desc->irq_data.irq = irq;
+	desc->name = NULL;
+	desc->handle_irq = handle_bad_irq;
+	return 0;
+}
+
+int __INIT__ init_irq(void)
+{
+	__UNUSED__ int ret;
+	for (int i = 0; i < NO_IRQs; i++)
+	{
+		ret = init_desc(irq_descs + i, i, 0);
+	}
+
+	return 0;
 }
 
 void pic_send_eoi(int int_no)
@@ -218,7 +242,7 @@ void trap(registers_t *regs)
 		}
 		else
 		{
-			print("Interrupt: %s\n", exception_messages[regs->int_no]);
+			printf("Interrupt: %s\n", exception_messages[regs->int_no]);
 		}
 	}
 	else if (regs->int_no >= IRQ0 && regs->int_no < 48)

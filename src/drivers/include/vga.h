@@ -2,7 +2,7 @@
 #define VGA_H
 
 #include "port.h"
-#include "args.h"
+#include "arg.h"
 #include "string.h"
 
 #define MAX_COLS 80
@@ -16,7 +16,7 @@
 #define REG_SCREEN_DATA 0x3d5
 
 void clear();
-void print_char(char c);
-void print(const char *fmt, ...);
+void putchar(char c);
+void puts(const char *str);
 
 #endif

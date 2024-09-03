@@ -28,15 +28,15 @@ void bit_print_v8(u8_t bitmap[], int start, int size)
 {
 	for (int i = start; i < start + size; ++i)
 	{
-		print("(row: %d) = ", i);
+		printf("(row: %d) = ", i);
 		for (int j = 7; j >= 0; --j)
 		{
-			print("%d", (bitmap[i] >> j) & 1);
+			printf("%d", (bitmap[i] >> j) & 1);
 		}
-		print(" (hex: %x) (ascii: %c)", bitmap[i], bitmap[i]);
-		print("\n");
+		printf(" (hex: %x) (ascii: %c)", bitmap[i], bitmap[i]);
+		printf("\n");
 	}
-	print("\n");
+	printf("\n");
 }
 
 /**
@@ -68,13 +68,13 @@ void bit_print_v32(u32_t bitmap[], u32_t start, u32_t size)
 {
 	for (u32_t i = start; i < start + size; ++i)
 	{
-		print("(row: %d) = ", i);
+		printf("(row: %d) = ", i);
 		for (int j = 31; j >= 0; --j)
 		{
-			print("%d", (bitmap[i] >> j) & 1);
+			printf("%d", (bitmap[i] >> j) & 1);
 		}
-		print(" (hex: %x) (ascii: %c)", bitmap[i], bitmap[i]);
-		print("\n");
+		printf(" (hex: %x) (ascii: %c)", bitmap[i], bitmap[i]);
+		printf("\n");
 	}
-	print("\n");
+	printf("\n");
 }

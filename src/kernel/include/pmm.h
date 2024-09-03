@@ -1,7 +1,7 @@
 #ifndef PMM_H
 #define PMM_H
 
-#include "vga.h"
+#include "io.h"
 #include "page.h"
 #include "type.h"
 #include "math.h"

@@ -1,5 +1,5 @@
-#ifndef ARGS_H
-#define ARGS_H
+#ifndef ARG_H
+#define ARG_H
 
 #include "type.h"
 

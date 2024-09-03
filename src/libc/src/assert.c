@@ -4,18 +4,18 @@ void __assert_fail__(string_t expr, string_t file, u32_t line, string_t func, bo
 {
 	if (panic)
 	{
-		print("\nThe kernel panicked!\n");
+		printf("\nThe kernel panicked!\n");
 	}
 	else
 	{
-		print("\nAssertion failed!\n");
+		printf("\nAssertion failed!\n");
 	}
 
-	print("Expression: %s\n"
-		  "File: %s\n"
-		  "Line: %d\n"
-		  "Function: %s\n",
-		  expr, file, line, func);
+	printf("Expression: %s\n"
+		   "File: %s\n"
+		   "Line: %d\n"
+		   "Function: %s\n",
+		   expr, file, line, func);
 
 	if (panic)
 	{

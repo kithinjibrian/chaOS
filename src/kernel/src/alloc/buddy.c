@@ -99,7 +99,7 @@ static int update_max_ptr(u8_t *new_value)
 	{
 		if (!get_page((virtual_address)new_value))
 		{
-			print("not mapped: %x\n", new_value);
+			printf("not mapped: %x\n", new_value);
 			return 0;
 		}
 		max_ptr_g = new_value;

@@ -112,6 +112,18 @@ size_t strlen(const char *str)
 	return len;
 }
 
+size_t strnlen(const char *s, size_t maxlen)
+{
+	const char *es = s;
+	while (*es && maxlen)
+	{
+		es++;
+		maxlen--;
+	}
+
+	return (es - s);
+}
+
 /**
  * Compare two strings
  * @param str1 first string

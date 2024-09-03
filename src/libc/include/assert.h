@@ -1,8 +1,8 @@
 #ifndef ASSERT_H
 #define ASSERT_H
 
+#include "io.h"
 #include "type.h"
-#include "vga.h"
 
 void __assert_fail__(string_t, string_t, u32_t, string_t, bool_e);
 
@@ -13,7 +13,7 @@ void __assert_fail__(string_t, string_t, u32_t, string_t, bool_e);
 #define halt(message)                       \
 	do                                      \
 	{                                       \
-		print("%s\n", message);             \
+		printf("%s\n", message);            \
 		__asm__ __volatile__("cli \n hlt"); \
 	} while (0)
 

@@ -4,7 +4,7 @@ static void load_module(multiboot_module_t *entry)
 {
 	char *name = (char *)(entry->mod_start + KERNEL_VIRT_BASE);
 
-	print("Loading module: %s\n", name);
+	printf("Loading module: %s\n", name);
 }
 
 void modules_load()

@@ -40,7 +40,7 @@ void mouse_handler(registers_t *regs __UNUSED__)
 {
 	// u8_t status = mouse_read();
 
-	print("Mouse: %c, %c\n", 10, 20);
+	printf("Mouse: %c, %c\n", 10, 20);
 }
 
 int __INIT__ init_mouse(void)
@@ -64,7 +64,7 @@ int __INIT__ init_mouse(void)
 	// mouse_write(0xF6); // Set default settings
 	if (mouse_read() != 0xFA)
 	{
-		print("Failed to enable mouse\n");
+		printf("Failed to enable mouse\n");
 	}
 
 	// mouse_write(0xF4); // Enable the mouse

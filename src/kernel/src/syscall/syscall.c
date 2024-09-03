@@ -2,7 +2,7 @@
 
 void init_syscall()
 {
-	syscall_reg(0, (void_fun)print);
+	syscall_reg(0, (void_fun)printf);
 }
 
 void syscall_reg(int syscall_id, void_fun handler)

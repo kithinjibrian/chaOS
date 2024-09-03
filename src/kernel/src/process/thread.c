@@ -29,7 +29,7 @@ thread_t *create_thread(thread_fun fn, void *arg)
 	thread->context->ebp = (u32_t)thread->kernel_stack + PAGE_SIZE;
 	thread->context->eip = (u32_t)fn;
 
-	print("thread: %p\n", thread);
+	printf("thread: %p\n", thread);
 
 	init_dlist_head(&(thread->list));
 

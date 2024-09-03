@@ -3,74 +3,74 @@
 bool_e caps_on_g = FALSE;
 bool_e shift_on_g = FALSE;
 
-const u32_t UNKNOWN = 0xFFFFFFFF;
-const u32_t F1 = 0xFFFFFFFF - 1;
-const u32_t F2 = 0xFFFFFFFF - 2;
-const u32_t F3 = 0xFFFFFFFF - 3;
-const u32_t F4 = 0xFFFFFFFF - 4;
-const u32_t F5 = 0xFFFFFFFF - 5;
-const u32_t F6 = 0xFFFFFFFF - 6;
-const u32_t F7 = 0xFFFFFFFF - 7;
-const u32_t F8 = 0xFFFFFFFF - 8;
-const u32_t F9 = 0xFFFFFFFF - 9;
-const u32_t UP = 0xFFFFFFFF - 10;
-const u32_t F10 = 0xFFFFFFFF - 11;
-const u32_t F11 = 0xFFFFFFFF - 12;
-const u32_t F12 = 0xFFFFFFFF - 13;
-const u32_t ESC = 0xFFFFFFFF - 14;
-const u32_t ALT = 0xFFFFFFFF - 15;
-const u32_t END = 0xFFFFFFFF - 16;
-const u32_t CTRL = 0xFFFFFFFF - 17;
-const u32_t HOME = 0xFFFFFFFF - 18;
-const u32_t LEFT = 0xFFFFFFFF - 19;
-const u32_t DOWN = 0xFFFFFFFF - 20;
-const u32_t RIGHT = 0xFFFFFFFF - 21;
-const u32_t RSHIFT = 0xFFFFFFFF - 22;
-const u32_t LSHIFT = 0xFFFFFFFF - 23;
-const u32_t PAGEUP = 0xFFFFFFFF - 24;
-const u32_t INSERT = 0xFFFFFFFF - 25;
-const u32_t DELETE = 0xFFFFFFFF - 26;
-const u32_t NUMLOCK = 0xFFFFFFFF - 27;
-const u32_t CAPSLOCK = 0xFFFFFFFF - 28;
-const u32_t PAGEDOWN = 0xFFFFFFFF - 29;
-const u32_t PRINTSCN = 0xFFFFFFFF - 30;
-const u32_t SCROLLLOCK = 0xFFFFFFFF - 31;
-const u32_t PAUSEBREAK = 0xFFFFFFFF - 32;
+const u32_t UNKNOWN_g = 0xFFFFFFFF;
+const u32_t F1_g = 0xFFFFFFFF - 1;
+const u32_t F2_g = 0xFFFFFFFF - 2;
+const u32_t F3_g = 0xFFFFFFFF - 3;
+const u32_t F4_g = 0xFFFFFFFF - 4;
+const u32_t F5_g = 0xFFFFFFFF - 5;
+const u32_t F6_g = 0xFFFFFFFF - 6;
+const u32_t F7_g = 0xFFFFFFFF - 7;
+const u32_t F8_g = 0xFFFFFFFF - 8;
+const u32_t F9_g = 0xFFFFFFFF - 9;
+const u32_t UP_g = 0xFFFFFFFF - 10;
+const u32_t F10_g = 0xFFFFFFFF - 11;
+const u32_t F11_g = 0xFFFFFFFF - 12;
+const u32_t F12_g = 0xFFFFFFFF - 13;
+const u32_t ESC_g = 0xFFFFFFFF - 14;
+const u32_t ALT_g = 0xFFFFFFFF - 15;
+const u32_t END_g = 0xFFFFFFFF - 16;
+const u32_t CTRL_g = 0xFFFFFFFF - 17;
+const u32_t HOME_g = 0xFFFFFFFF - 18;
+const u32_t LEFT_g = 0xFFFFFFFF - 19;
+const u32_t DOWN_g = 0xFFFFFFFF - 20;
+const u32_t RIGHT_g = 0xFFFFFFFF - 21;
+const u32_t RSHIFT_g = 0xFFFFFFFF - 22;
+const u32_t LSHIFT_g = 0xFFFFFFFF - 23;
+const u32_t PAGEUP_g = 0xFFFFFFFF - 24;
+const u32_t INSERT_g = 0xFFFFFFFF - 25;
+const u32_t DELETE_g = 0xFFFFFFFF - 26;
+const u32_t NUMLOCK_g = 0xFFFFFFFF - 27;
+const u32_t CAPSLOCK_g = 0xFFFFFFFF - 28;
+const u32_t PAGEDOWN_g = 0xFFFFFFFF - 29;
+const u32_t PRINTSCN_g = 0xFFFFFFFF - 30;
+const u32_t SCROLLLOCK_g = 0xFFFFFFFF - 31;
+const u32_t PAUSEBREAK_g = 0xFFFFFFFF - 32;
 
 const u32_t keymap[128] = {
-	UNKNOWN, ESC,
+	UNKNOWN_g, ESC_g,
 	//
 	'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b',
 	//
 	'\t', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\n',
 	//
-	CTRL, 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', '`', LSHIFT,
+	CTRL_g, 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', '`', LSHIFT_g,
 	//
-	'\\', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', RSHIFT,
+	'\\', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', RSHIFT_g,
 	//
-	'*', ALT, ' ', CAPSLOCK, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10,
+	'*', ALT_g, ' ', CAPSLOCK_g, F1_g, F2_g, F3_g, F4_g, F5_g, F6_g, F7_g, F8_g, F9_g, F10_g,
 	//
-	NUMLOCK, SCROLLLOCK, HOME, UP, PAGEUP,
+	NUMLOCK_g, SCROLLLOCK_g, HOME_g, UP_g, PAGEUP_g,
 	//
 	'-',
 	//
-	LEFT, UNKNOWN, RIGHT,
+	LEFT_g, UNKNOWN_g, RIGHT_g,
 	//
 	'+',
 	//
-	END, DOWN, PAGEDOWN,
+	END_g, DOWN_g, PAGEDOWN_g,
 	//
-	INSERT, DELETE, UNKNOWN, UNKNOWN, UNKNOWN, F11, F12, UNKNOWN,
+	INSERT_g, DELETE_g, UNKNOWN_g, UNKNOWN_g, UNKNOWN_g, F11_g, F12_g, UNKNOWN_g,
 	//
-	UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
+	UNKNOWN_g, UNKNOWN_g, UNKNOWN_g, UNKNOWN_g, UNKNOWN_g, UNKNOWN_g, UNKNOWN_g, UNKNOWN_g,
 	//
-	UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
+	UNKNOWN_g, UNKNOWN_g, UNKNOWN_g, UNKNOWN_g, UNKNOWN_g, UNKNOWN_g, UNKNOWN_g, UNKNOWN_g,
 	//
-	UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
+	UNKNOWN_g, UNKNOWN_g, UNKNOWN_g, UNKNOWN_g, UNKNOWN_g, UNKNOWN_g, UNKNOWN_g, UNKNOWN_g,
 	//
-	UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
+	UNKNOWN_g, UNKNOWN_g, UNKNOWN_g, UNKNOWN_g, UNKNOWN_g, UNKNOWN_g, UNKNOWN_g, UNKNOWN_g,
 	//
-	UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN};
+	UNKNOWN_g, UNKNOWN_g, UNKNOWN_g, UNKNOWN_g, UNKNOWN_g, UNKNOWN_g};
 
 char shift(char ch)
 {
@@ -188,7 +188,7 @@ void keyboard_handler(registers_t *regs __UNUSED__)
 				/* convert to lower case */
 				ch += 32;
 			}
-			print("%c", ch);
+			printf("%c", ch);
 		}
 		break;
 	}

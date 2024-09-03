@@ -1,7 +1,7 @@
 #ifndef VFS_H
 #define VFS_H
 
-#include "vga.h"
+#include "io.h"
 #include "type.h"
 #include "string.h"
 #include "spinlock.h"
@@ -41,7 +41,7 @@ typedef struct superblock_ops
 
 typedef struct superblock
 {
-	list_t list;
+	dlist_t list;
 	u32_t magic;
 	u32_t blocksize;
 	struct dentry *root;

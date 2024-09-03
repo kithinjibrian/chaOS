@@ -58,20 +58,20 @@ void page_fault(registers_t *regs __UNUSED__)
 	// caused by an instruction fetch?
 	// int id = regs->err_code & 0x10;
 
-	// print("page fault handler: %x %d\n", faulting_address, user_mode);
+	// printf("page fault handler: %x %d\n", faulting_address, user_mode);
 }
 
 void print_page_table(page_table_t *page_table)
 {
 	for (int i = 0; i < 5; i++)
 	{
-		print("page number: %d, "
-			  "page present: %d, "
-			  "page addr: %x, "
-			  "page frame: %d\n",
-			  i, page_table->entries[i].present,
-			  page_table->entries[i].frame * PAGE_SIZE,
-			  page_table->entries[i].frame);
+		printf("page number: %d, "
+			   "page present: %d, "
+			   "page addr: %x, "
+			   "page frame: %d\n",
+			   i, page_table->entries[i].present,
+			   page_table->entries[i].frame * PAGE_SIZE,
+			   page_table->entries[i].frame);
 	}
 }
 
@@ -81,13 +81,13 @@ void print_page_dir()
 
 	for (int i = 830; i < 840; i++)
 	{
-		print("pd number: %d, "
-			  "pd present: %d, "
-			  "pd write: %d, "
-			  "pd frame: %d\n",
-			  i, page_dir[i] & PAGE_PRESENT,
-			  page_dir[i] & PAGE_WRITE,
-			  0);
+		printf("pd number: %d, "
+			   "pd present: %d, "
+			   "pd write: %d, "
+			   "pd frame: %d\n",
+			   i, page_dir[i] & PAGE_PRESENT,
+			   page_dir[i] & PAGE_WRITE,
+			   0);
 	}
 }
 

@@ -39,7 +39,7 @@ void clear()
 	move_cursor();
 }
 
-void print_char(char c)
+void putchar(char c)
 {
 	/* Handle backspace, by decrementing cursor position */
 	if (c == '\b')
@@ -94,100 +94,8 @@ void print_char(char c)
 	move_cursor();
 }
 
-/**
- * Print a formatted string to the VGA.
- * Expected format specifier is %c, %s, %d.
- * %c - print a character.
- * %s - print a string.
- * %d - print an integer.
- * @param fmt format string
- * @param ... arguments
- */
-void print(const char *fmt, ...)
+void puts(const char *str)
 {
-	/**
-	 * Get the pointer to the first argument
-	 */
-	va_list_t args;
-	va_start(args, fmt);
-
-	while (*fmt)
-	{
-		if (*fmt == '%')
-		{
-			fmt++;
-			switch (*fmt)
-			{
-			case 'c':
-			{
-				char c = va_arg(args, char);
-				print_char(c);
-				break;
-			}
-			case 's':
-			{
-				char *s = va_arg(args, char *);
-				while (*s)
-				{
-					print_char(*s);
-					s++;
-				}
-				break;
-			}
-
-			case 'd':
-			{
-				int num = va_arg(args, int);
-
-				/**
-				 *  a 32 bit integer is at most 11 digits plus the sign
-				 */
-				char ac[11];
-
-				itoa(num, ac, 10);
-
-				for (int i = 0; ac[i] != '\0'; i++)
-					print_char(ac[i]);
-
-				break;
-			}
-
-			case 'x':
-			{
-				u32_t hex = va_arg(args, u32_t);
-				char ac[11];
-				htoa(hex, ac);
-				for (int i = 0; i < 11; i++)
-					print_char(ac[i]);
-				break;
-			}
-
-			case 'p':
-			{
-				u32_t hex = va_arg(args, u32_t);
-				if (hex == 0)
-				{
-					print("(nil)");
-				}
-				else
-				{
-					print("%x", hex);
-				}
-				break;
-			}
-
-			default:
-				print_char('%');
-				print_char(*fmt);
-				break;
-			}
-		}
-		else
-		{
-			print_char(*fmt);
-		}
-		fmt++;
-	}
-
-	va_end(args);
+	while (*str)
+		putchar(*str++);
 }
