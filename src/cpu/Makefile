@@ -1,11 +1,8 @@
 CC = i686-elf-gcc
-CFLAGS = -std=c11 -g -ffreestanding -Wall -Wextra -Werror -pedantic
+CFLAGS = -std=c11 -g -ffreestanding -Wall -Wextra -Werror
 
 NASM = nasm
 NASM_FLAGS = -f elf32 -g
-
-GAS = i686-elf-as
-GAS_FLAGS = -g
 
 SRC_DIR = src
 BUILD_DIR = build
@@ -34,7 +31,7 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.S
 	@mkdir -p $(@D)
-	$(GAS) $(GAS_FLAGS) $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.asm
 	@mkdir -p $(@D)
